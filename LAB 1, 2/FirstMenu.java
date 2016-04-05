@@ -36,6 +36,8 @@ public class FirstMenu {
   private final int leftIndent = 25;
   private final int minNumber = 10;
   private final int maxNumber = 100;
+  private final int xFrameSize = 800;
+  private final int yFrameSize = 600;
   private final Color labelsColor = new Color(130, 130, 130);
   private final Color mouseEnteredColor = new Color(230, 190, 130);
   int[] numOf = new int[3];
@@ -45,7 +47,7 @@ public class FirstMenu {
     newGameLabel = new JLabel("New Game");
     settingsLabel = new JLabel("Settings");
     exitLabel = new JLabel("Exit");
-    firstFrame.setSize(800, 600);
+    firstFrame.setSize(xFrameSize, yFrameSize);
     firstFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     Font font = new Font("Modern No. 20", Font.PLAIN, 30);
     newGameLabel.setFont(font);
@@ -156,7 +158,6 @@ public class FirstMenu {
     }
   }
   class Settings {
-    private boolean flag;
     private JFrame settingsFrame;
     private JLabel rowsLabel;
     private JLabel columnsLabel;

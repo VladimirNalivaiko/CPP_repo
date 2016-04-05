@@ -19,14 +19,15 @@ public class Start {
   private int NUM_OF_COLUMNS = 10;
   private final int rightIndent = 6;
   private final int downIndent = 52;
+  private final int minSize = 10;
   Start(int numOf[]) {
-    if (numOf[0] > 10){
+    if (numOf[0] > minSize){
       NUM_OF_COLUMNS = numOf[0];
     }
-    if (numOf[1] > 10){
+    if (numOf[1] > minSize){
       NUM_OF_ROWS = numOf[1];
     }
-    if (numOf[2] > 10) {
+    if (numOf[2] > minSize) {
       NUM_OF_BOMBS = numOf[2];
     }
     frame = new JFrame("Miner");
