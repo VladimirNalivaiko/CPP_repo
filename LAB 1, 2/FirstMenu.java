@@ -21,7 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 /**
- * 
+ *
  * @author Vladimir
  *
  */
@@ -33,6 +33,8 @@ public class FirstMenu {
   private static JFrame firstFrame;
   private final int rightIndent = 500;
   private final int leftIndent = 25;
+  private final int minNumber = 10;
+  private final int maxNumber = 100;
   private final Color labelsColor = new Color(130, 130, 130);
   private final Color mouseEnteredColor = new Color(230, 190, 130);
   int[] numOf = new int[3];
@@ -154,7 +156,6 @@ public class FirstMenu {
   }
   class Settings {
     private boolean flag;
-    // private int[] numOf = new int[3];
     private JFrame settingsFrame;
     private JLabel rowsLabel;
     private JLabel columnsLabel;
@@ -172,7 +173,7 @@ public class FirstMenu {
       rowsLabel = new JLabel("Choose number of rows");
       columnsLabel = new JLabel("Choose number of columns");
       bombsLabel = new JLabel("Choose number of bombs");
-      for (int i = 10; i < 100; i++) {
+      for (int i = minNumber; i < maxNumber; i++) {
         rows.addItem(i);
         columns.addItem(i);
         bombs.addItem(i);

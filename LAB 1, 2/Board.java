@@ -10,27 +10,27 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 /**
- * 
+ *
  * @author Vladimir
  *
  */
 public class Board extends JPanel {
   private final int CELL_SIZE = 15;
-  private int NUM_OF_BOMBS = 10;
-  private static int NUM_OF_UNCOVED_BOMBS = 10;
-  private static int NUM_OF_WRONG_FLAGS = 0;
-  private int NUM_OF_ROWS = 10;
-  private int NUM_OF_COLUMNS = 10;
+  private int numOfBombs = 10;
+  private static int numOfUncoveredBombs = 10;
+  private static int numOfWrongFlags = 0;
+  private int numOfRows = 10;
+  private int numOfColumns = 10;
   private static boolean inGame;
 
   static Image[] img = new Image[13];
   static private Cell[][] field;
 
-  public Board(int numOfColumns, int numOfRows, int numOfBombs) {
-    NUM_OF_COLUMNS = numOfColumns;
-    NUM_OF_ROWS = numOfRows;
-    NUM_OF_BOMBS = numOfBombs; 
-    NUM_OF_UNCOVED_BOMBS = NUM_OF_BOMBS;
+  public Board(int сolumns, int rows, int bombs) {
+    numOfColumns = сolumns;
+    numOfRows = rows;
+    numOfBombs = bombs;
+    numOfUncoveredBombs = numOfBombs;
     img = new Image[13];
     for (int i = 0; i < 13; i++) {
       img[i] = (new ImageIcon(i + ".png")).getImage();
@@ -42,7 +42,7 @@ public class Board extends JPanel {
 
   public void finish() {
     this.repaint();
-    if (NUM_OF_UNCOVED_BOMBS != 0) {
+    if (numOfUncoveredBombs != 0) {
       JOptionPane.showMessageDialog(new JFrame(), "     You lose");
     } else {
       JOptionPane.showMessageDialog(new JFrame(), "     You win");
@@ -51,9 +51,9 @@ public class Board extends JPanel {
   }
 
   public void Init() {
-    field = new Cell[NUM_OF_ROWS][NUM_OF_COLUMNS];
-    for (int i = 0; i < NUM_OF_ROWS; i++) {
-      for (int j = 0; j < NUM_OF_COLUMNS; j++) {
+    field = new Cell[numOfRows][numOfColumns];
+    for (int i = 0; i < numOfRows; i++) {
+      for (int j = 0; j < numOfColumns; j++) {
         field[i][j] = new Cell(j, i);
       }
     }
@@ -61,13 +61,13 @@ public class Board extends JPanel {
 
   public void ResetGame() {
     System.out.println("RESETGAME");
-    for (int i = 0; i < NUM_OF_ROWS; i++) {
-      for (int j = 0; j < NUM_OF_COLUMNS; j++) {
+    for (int i = 0; i < numOfRows; i++) {
+      for (int j = 0; j < numOfColumns; j++) {
         field[i][j].StartNewGame();
       }
       repaint();
     }
-    NUM_OF_UNCOVED_BOMBS = NUM_OF_BOMBS;
+    numOfUncoveredBombs = numOfBombs;
     inGame = true;
   }
 
@@ -76,9 +76,9 @@ public class Board extends JPanel {
     int numOfPastedBombs = 0;
     int xPositionOfPasteBomb = 0;
     int yPositionOfPasteBomb = 0;
-    while (numOfPastedBombs < NUM_OF_BOMBS) {
-      xPositionOfPasteBomb = Math.abs(random.nextInt() % NUM_OF_ROWS);
-      yPositionOfPasteBomb = Math.abs(random.nextInt() % NUM_OF_COLUMNS);
+    while (numOfPastedBombs < numOfBombs) {
+      xPositionOfPasteBomb = Math.abs(random.nextInt() % numOfRows);
+      yPositionOfPasteBomb = Math.abs(random.nextInt() % numOfColumns);
       if (!(field[xPositionOfPasteBomb][yPositionOfPasteBomb].getIsBomb())
           && !(field[xPositionOfPasteBomb][yPositionOfPasteBomb].getIsOpen())) {
         field[xPositionOfPasteBomb][yPositionOfPasteBomb].setIsBomb(true);
@@ -96,8 +96,9 @@ public class Board extends JPanel {
         field[y][x].setIsOpen(true);
         return;
       }
-      if (y != 0) { // Этим блоком if мы ищем своболные клетки сверху
-        if (findNearBombs(x, y - 1) == 0 && !field[y - 1][x].getIsOpen()) {
+      if (y != 0) { 
+        if (findNearBombs(x, y - 1) == 0 &&
+            !field[y - 1][x].getIsOpen()) {
           field[y - 1][x].setIsOpen(true);
           field[y - 1][x].setToRepaint(true);
           findEmptyCells(x, y - 1);
@@ -106,8 +107,9 @@ public class Board extends JPanel {
           field[y - 1][x].setToRepaint(true);
         }
       }
-      if (x != 0) { // Этим блоком if мы ищем своболные клетки слева
-        if (findNearBombs(x - 1, y) == 0 && !field[y][x - 1].getIsOpen()) {
+      if (x != 0) { 
+        if (findNearBombs(x - 1, y) == 0 &&
+            !field[y][x - 1].getIsOpen()) {
           field[y][x - 1].setToRepaint(true);
           field[y][x - 1].setIsOpen(true);
           findEmptyCells(x - 1, y);
@@ -116,8 +118,9 @@ public class Board extends JPanel {
           field[y][x - 1].setToRepaint(true);
         }
       }
-      if (y != NUM_OF_ROWS - 1) { // Этим блоком if мы ищем своболные клетки снизу
-        if (findNearBombs(x, y + 1) == 0 && !field[y + 1][x].getIsOpen()) {
+      if (y != numOfRows - 1) {
+        if (findNearBombs(x, y + 1) == 0 &&
+            !field[y + 1][x].getIsOpen()) {
           field[y + 1][x].setIsOpen(true);
           field[y + 1][x].setToRepaint(true);
           findEmptyCells(x, y + 1);
@@ -126,8 +129,9 @@ public class Board extends JPanel {
           field[y + 1][x].setToRepaint(true);
         }
       }
-      if (x != NUM_OF_COLUMNS - 1) { // Этим блоком if мы ищем своболные клетки справа
-        if (findNearBombs(x + 1, y) == 0 && !field[y][x + 1].getIsOpen()) {
+      if (x != numOfColumns - 1) {
+        if (findNearBombs(x + 1, y) == 0 &&
+            !field[y][x + 1].getIsOpen()) {
           field[y][x + 1].setIsOpen(true);
           field[y][x + 1].setToRepaint(true);
           findEmptyCells(x + 1, y);
@@ -136,8 +140,9 @@ public class Board extends JPanel {
           field[y][x + 1].setToRepaint(true);
         }
       }
-      if (y != 0 && x != 0) { // Этим блоком if мы ищем своболные клетки сверху слева
-        if (findNearBombs(x - 1, y - 1) == 0 && !field[y - 1][x - 1].getIsOpen()) {
+      if (y != 0 && x != 0) {
+        if (findNearBombs(x - 1, y - 1) == 0 &&
+            !field[y - 1][x - 1].getIsOpen()) {
           field[y - 1][x - 1].setIsOpen(true);
           field[y - 1][x - 1].setToRepaint(true);
           findEmptyCells(x - 1, y - 1);
@@ -146,8 +151,9 @@ public class Board extends JPanel {
           field[y - 1][x - 1].setToRepaint(true);
         }
       }
-      if (y != NUM_OF_ROWS - 1 && x != 0) { // Этим блоком if мы ищем своболные клетки снизу слева
-        if (findNearBombs(x - 1, y + 1) == 0 && !field[y + 1][x - 1].getIsOpen()) {
+      if (y != numOfRows - 1 && x != 0) {
+        if (findNearBombs(x - 1, y + 1) == 0 &&
+            !field[y + 1][x - 1].getIsOpen()) {
           field[y + 1][x - 1].setIsOpen(true);
           field[y + 1][x - 1].setToRepaint(true);
           findEmptyCells(x - 1, y + 1);
@@ -156,20 +162,21 @@ public class Board extends JPanel {
           field[y + 1][x - 1].setToRepaint(true);
         }
       }
-      if (y != NUM_OF_ROWS - 1 && x != NUM_OF_COLUMNS - 1) { // Этим блоком if мы ищем своболные
-                                                             // клетки снизу справа
-        if (findNearBombs(x + 1, y + 1) == 0 && !field[y + 1][x + 1].getIsOpen()) {
+      if (y != numOfRows - 1 && x != numOfColumns - 1) {  
+        if (findNearBombs(x + 1, y + 1) == 0 &&
+            !field[y + 1][x + 1].getIsOpen()) {
           field[y + 1][x + 1].setIsOpen(true);
           field[y + 1][x + 1].setToRepaint(true);
           findEmptyCells(x + 1, y + 1);
-        } else {
+        }
+        else {
           field[y + 1][x + 1].setIsOpen(true);
           field[y + 1][x + 1].setToRepaint(true);
         }
       }
-      if (y != 0 && x != NUM_OF_COLUMNS - 1) { // Этим блоком if мы ищем своболные клетки сверху
-                                               // справа
-        if (findNearBombs(x + 1, y - 1) == 0 && !field[y - 1][x + 1].getIsOpen()) {
+      if (y != 0 && x != numOfColumns - 1) {
+        if (findNearBombs(x + 1, y - 1) == 0 &&
+            !field[y - 1][x + 1].getIsOpen()) {
           field[y - 1][x + 1].setIsOpen(true);
           field[y - 1][x + 1].setToRepaint(true);
           findEmptyCells(x + 1, y - 1);
@@ -183,42 +190,42 @@ public class Board extends JPanel {
 
   public int findNearBombs(int x, int y) {
     int numOfNearBombs = 0;
-    if (y != 0) { // сверху
+    if (y != 0) {
       if (field[y - 1][x].getIsBomb()) {
         numOfNearBombs++;
       }
     }
-    if (y != 0 && x != 0) { // слева сверху
+    if (y != 0 && x != 0) {
       if (field[y - 1][x - 1].getIsBomb()) {
         numOfNearBombs++;
       }
     }
-    if (x != 0) { // слева
+    if (x != 0) {
       if (field[y][x - 1].getIsBomb()) {
         numOfNearBombs++;
       }
     }
-    if (x != 0 && y != NUM_OF_ROWS - 1) { // слева снизу
+    if (x != 0 && y != numOfRows - 1) {
       if (field[y + 1][x - 1].getIsBomb()) {
         numOfNearBombs++;
       }
     }
-    if (y != NUM_OF_ROWS - 1) { // снизу
+    if (y != numOfRows - 1) { 
       if (field[y + 1][x].getIsBomb()) {
         numOfNearBombs++;
       }
     }
-    if (x != NUM_OF_COLUMNS - 1 && y != NUM_OF_ROWS - 1) { // справа снизу
+    if (x != numOfColumns - 1 && y != numOfRows - 1) {
       if (field[y + 1][x + 1].getIsBomb()) {
         numOfNearBombs++;
       }
     }
-    if (x != NUM_OF_COLUMNS - 1) { // справа
+    if (x != numOfColumns - 1) {
       if (field[y][x + 1].getIsBomb()) {
         numOfNearBombs++;
       }
     }
-    if (x != NUM_OF_COLUMNS - 1 && y != 0) { // справа сверху
+    if (x != numOfColumns - 1 && y != 0) {
       if (field[y - 1][x + 1].getIsBomb()) {
         numOfNearBombs++;
       }
@@ -236,27 +243,28 @@ public class Board extends JPanel {
       int pressedCol = event.getX() / CELL_SIZE;
       int pressedRow = event.getY() / CELL_SIZE;
 
-      if ((pressedCol >= NUM_OF_COLUMNS) || (pressedRow >= NUM_OF_ROWS))
+      if ((pressedCol >= numOfColumns) || (pressedRow >= numOfRows))
         return;
 
       Cell pressedCell = field[pressedRow][pressedCol];
-      if (pressedCell.getIsAnyBanged() || NUM_OF_UNCOVED_BOMBS == 0 && NUM_OF_WRONG_FLAGS == 0)
+      if (pressedCell.getIsAnyBanged() || numOfUncoveredBombs == 0 &&
+          numOfWrongFlags == 0)
         return;
-      if (event.getButton() == MouseEvent.BUTTON3 && !pressedCell.getIsOpen()) {
+      if (event.getButton() == MouseEvent.BUTTON3 && !pressedCell.getIsOpen()){
         if (!pressedCell.getIsSooposedToBeBomb()) {
           if (pressedCell.getIsBomb())
-            NUM_OF_UNCOVED_BOMBS--;
+            numOfUncoveredBombs--;
           else
-            NUM_OF_WRONG_FLAGS++;
+            numOfWrongFlags++;
           pressedCell.setIsSooposedToBeBomb(true);
         } else {
           pressedCell.setIsSooposedToBeBomb(false);
           if (pressedCell.getIsBomb())
-            NUM_OF_UNCOVED_BOMBS++;
+            numOfUncoveredBombs++;
           else
-            NUM_OF_WRONG_FLAGS--;
+            numOfWrongFlags--;
         }
-        if (NUM_OF_UNCOVED_BOMBS == 0 && NUM_OF_WRONG_FLAGS == 0) {
+        if (numOfUncoveredBombs == 0 && numOfWrongFlags == 0) {
           finish();
           return;
         }
@@ -307,8 +315,8 @@ public class Board extends JPanel {
   }
 
   public void paint(Graphics g) {
-    for (int i = 0; i < NUM_OF_ROWS; i++) {
-      for (int j = 0; j < NUM_OF_COLUMNS; j++) {
+    for (int i = 0; i < numOfRows; i++) {
+      for (int j = 0; j < numOfColumns; j++) {
         if (field[i][j].getToRepaint()) {
           int xPosition, yPosition;
           xPosition = (j * CELL_SIZE);
