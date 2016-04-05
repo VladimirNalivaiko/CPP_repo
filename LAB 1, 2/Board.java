@@ -25,7 +25,7 @@ public class Board extends JPanel {
   public Board(int numOfColumns, int numOfRows, int numOfBombs) {
     NUM_OF_COLUMNS = numOfColumns;
     NUM_OF_ROWS = numOfRows;
-    NUM_OF_BOMBS = numOfBombs;
+    NUM_OF_BOMBS = numOfBombs; 
     NUM_OF_UNCOVED_BOMBS = NUM_OF_BOMBS;
     img = new Image[13];
     for (int i = 0; i < 13; i++) {

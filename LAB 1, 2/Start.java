@@ -13,6 +13,8 @@ public class Start {
   private int NUM_OF_BOMBS = 10;
   private int NUM_OF_ROWS = 10;
   private int NUM_OF_COLUMNS = 10;
+  private final int rightIndent = 6;
+  private final int downIndent = 52;
 
   Start(int numOf[]) {
     if (numOf[0] > 10){
@@ -24,9 +26,6 @@ public class Start {
     if (numOf[2] > 10) {
       NUM_OF_BOMBS = numOf[2];
     }
-    NUM_OF_ROWS = numOf[0];
-    NUM_OF_COLUMNS = numOf[1];
-    NUM_OF_BOMBS = numOf[2];
     frame = new JFrame("Miner");
     JMenuBar menu = new JMenuBar();
     JMenu gameMenu = new JMenu("Game");
@@ -35,7 +34,8 @@ public class Start {
     JMenuItem exitMenuItem = new JMenuItem("Exit");
     bd = new Board(NUM_OF_ROWS, NUM_OF_COLUMNS, NUM_OF_BOMBS);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(NUM_OF_ROWS * CELL_SIZE + 6, NUM_OF_COLUMNS * CELL_SIZE + 52);
+    frame.setSize(NUM_OF_ROWS * CELL_SIZE + rightIndent,
+        NUM_OF_COLUMNS * CELL_SIZE + downIndent);
     frame.setLocationRelativeTo(null);
 
     newGameMenuItem.addActionListener(new NewGameMenuItemListener());

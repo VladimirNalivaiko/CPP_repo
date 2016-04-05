@@ -27,6 +27,10 @@ public class FirstMenu {
   private static JLabel exitLabel;
   private static BgPanel firstPanel;
   private static JFrame firstFrame;
+  private final int rightIndent = 500;
+  private final int leftIndent = 25;
+  private final Color labelsColor = new Color(130, 130, 130);
+  private final Color mouseEnteredColor = new Color(230, 190, 130);
   int[] numOf = new int[3];
 
   public FirstMenu() {
@@ -40,7 +44,7 @@ public class FirstMenu {
     newGameLabel.setFont(font);
     settingsLabel.setFont(font);
     exitLabel.setFont(font);
-    newGameLabel.setForeground(new Color(130, 130, 130));
+    newGameLabel.setForeground(labelsColor);
     settingsLabel.setForeground(newGameLabel.getForeground());
     exitLabel.setForeground(newGameLabel.getForeground());
     firstFrame.setLocationRelativeTo(null);
@@ -48,12 +52,15 @@ public class FirstMenu {
     firstPanel = new BgPanel();
     firstPanel.setLayout(new GridBagLayout());
 
-    firstPanel.add(newGameLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH,
-        GridBagConstraints.HORIZONTAL, new Insets(230, 0, 25, 500), 0, 0));
+    firstPanel.add(newGameLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0,
+        GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+        new Insets(230, 0, leftIndent, rightIndent), 0, 0));
     firstPanel.add(settingsLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0,
-        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 25, 500), 0, 0));
-    firstPanel.add(exitLabel, new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.CENTER,
-        GridBagConstraints.HORIZONTAL, new Insets(0, 0, 25, 500), 0, 0));
+        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+        new Insets(0, 0, leftIndent, rightIndent), 0, 0));
+    firstPanel.add(exitLabel, new GridBagConstraints(0, 2, 1, 1, 0, 0,
+        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+        new Insets(0, 0, leftIndent, rightIndent), 0, 0));
 
     firstFrame.add(firstPanel);
     firstFrame.setVisible(true);
@@ -71,12 +78,12 @@ public class FirstMenu {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-      exitLabel.setForeground(new Color(230, 190, 130));
+      exitLabel.setForeground(mouseEnteredColor);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-      exitLabel.setForeground(new Color(130, 130, 130));
+      exitLabel.setForeground(labelsColor);
     }
 
     @Override
@@ -93,12 +100,12 @@ public class FirstMenu {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-      settingsLabel.setForeground(new Color(230, 190, 130));
+      settingsLabel.setForeground(mouseEnteredColor);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-      settingsLabel.setForeground(new Color(130, 130, 130));
+      settingsLabel.setForeground(labelsColor);
     }
 
     @Override
@@ -116,12 +123,12 @@ public class FirstMenu {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-      newGameLabel.setForeground(new Color(230, 190, 130));
+      newGameLabel.setForeground(mouseEnteredColor);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-      newGameLabel.setForeground(new Color(130, 130, 130));
+      newGameLabel.setForeground(labelsColor);
     }
 
     @Override
