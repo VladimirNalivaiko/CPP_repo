@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_9ba07c92",
+        "filename": "LAB 1, 2/Board.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-05T17:24:56Z",
+      "side": 1,
+      "message": "Why this variables styled as constants?",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 32
+      },
+      "revId": "c0e541b02c52f49126849830e73241e53eed65ac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_9b799c32",
+        "filename": "LAB 1, 2/FirstMenu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-05T17:24:56Z",
+      "side": 1,
+      "message": "why this handler do nothing?",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 45
+      },
+      "revId": "c0e541b02c52f49126849830e73241e53eed65ac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_7b76d83f",
+        "filename": "LAB 1, 2/FirstMenu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-05T17:24:56Z",
+      "side": 1,
+      "message": "and this",
+      "range": {
+        "startLine": 137,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 3
+      },
+      "revId": "c0e541b02c52f49126849830e73241e53eed65ac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_dbb4c4d2",
+        "filename": "LAB 1, 2/FirstMenu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-05T17:24:56Z",
+      "side": 1,
+      "message": "magic numbers)",
+      "range": {
+        "startLine": 171,
+        "startChar": 6,
+        "endLine": 171,
+        "endChar": 38
+      },
+      "revId": "c0e541b02c52f49126849830e73241e53eed65ac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_1bbb4cc6",
+        "filename": "LAB 1, 2/FirstMenu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-05T17:24:56Z",
+      "side": 1,
+      "message": "We can use just okButton.isSelected(), where we need this. Why we need this method, idk...",
+      "range": {
+        "startLine": 192,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 5
+      },
+      "revId": "c0e541b02c52f49126849830e73241e53eed65ac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
