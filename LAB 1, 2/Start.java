@@ -6,47 +6,19 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 /**
- * Инициирует начало игры.
+ * Initializes the start of the game.
  * @author Vladimir
- * @param bd Поле, на котором размещаются клетки.
+ * 
  */
 public class Start {
-  /**
-   * <p>Поле, на котором размещаются клетки.</p>
-   */
   private static Board bd;
-  /**
-   * Размер клетки.
-   */
   private final int CELL_SIZE = 15;
-  /**
-   * Форма, на которой находится поле с клетками и менюбар.
-   */  
   private static JFrame frame;
-  /**
-   *
-   */
   private int NUM_OF_BOMBS = 10;
-  /**
-   *
-   */
   private int NUM_OF_ROWS = 10;
-  /**
-   *
-   */
   private int NUM_OF_COLUMNS = 10;
-  /**
-   *
-   */
   private final int rightIndent = 6;
-  /**
-   *
-   */
   private final int downIndent = 52;
-  /**
-   *
-   * @param numOf
-   */
   Start(int numOf[]) {
     if (numOf[0] > 10){
       NUM_OF_COLUMNS = numOf[0];

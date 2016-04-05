@@ -1,5 +1,5 @@
 /**
- * 
+ * Contains cell characteristics.
  * @author Vladimir
  *
  */

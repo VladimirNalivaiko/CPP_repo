@@ -21,7 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 /**
- *
+ * First menu of the game.
+ * Contains New Game, Settings and Exit buttons.
  * @author Vladimir
  *
  */
