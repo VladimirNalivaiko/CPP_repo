@@ -9,7 +9,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
+/**
+ * 
+ * @author Vladimir
+ *
+ */
 public class Board extends JPanel {
   private final int CELL_SIZE = 15;
   private int NUM_OF_BOMBS = 10;

@@ -20,7 +20,11 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+/**
+ * 
+ * @author Vladimir
+ *
+ */
 public class FirstMenu {
   private static JLabel newGameLabel;
   private static JLabel settingsLabel;
@@ -188,16 +192,11 @@ public class FirstMenu {
       settingsFrame.setVisible(true);
       okButton.addActionListener(new ButtonListener());
     }
-
-    public boolean isOkButtonSelected() {
-      return okButton.isSelected();
-    }
-    
     class ButtonListener implements ActionListener {
       @Override
       public void actionPerformed(ActionEvent arg0) {
         numOf[0] = (int) columns.getSelectedItem();
-        numOf[1] = (int) rows.getSelectedItem();        
+        numOf[1] = (int) rows.getSelectedItem();
         numOf[2] = (int) bombs.getSelectedItem();
         settingsFrame.dispose();
       }
