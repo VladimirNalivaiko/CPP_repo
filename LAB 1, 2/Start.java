@@ -12,23 +12,23 @@ import javax.swing.JMenuItem;
  */
 public class Start {
   private static Board bd;
-  private final int CELL_SIZE = 15;
   private static JFrame frame;
-  private int NUM_OF_BOMBS = 10;
-  private int NUM_OF_ROWS = 10;
-  private int NUM_OF_COLUMNS = 10;
-  private final int rightIndent = 6;
-  private final int downIndent = 52;
-  private final int minSize = 10;
+  private int numOfBombs = 10;
+  private int numOfRows = 10;
+  private int numOfColumns = 10;
+  private final int CELL_SIZE = 15;
+  private final int RIGHT_INDENT = 6;
+  private final int LEFT_INDENT = 52;
+  private final int MIN_SIZE = 10;
   Start(int numOf[]) {
-    if (numOf[0] > minSize){
-      NUM_OF_COLUMNS = numOf[0];
+    if (numOf[0] > MIN_SIZE){
+      numOfColumns = numOf[0];
     }
-    if (numOf[1] > minSize){
-      NUM_OF_ROWS = numOf[1];
+    if (numOf[1] > MIN_SIZE){
+      numOfRows = numOf[1];
     }
-    if (numOf[2] > minSize) {
-      NUM_OF_BOMBS = numOf[2];
+    if (numOf[2] > MIN_SIZE) {
+      numOfBombs = numOf[2];
     }
     frame = new JFrame("Miner");
     JMenuBar menu = new JMenuBar();
@@ -36,10 +36,10 @@ public class Start {
     JMenuItem newGameMenuItem = new JMenuItem("New Game");
     JMenuItem backToMenuItem = new JMenuItem("Back to menu");
     JMenuItem exitMenuItem = new JMenuItem("Exit");
-    bd = new Board(NUM_OF_ROWS, NUM_OF_COLUMNS, NUM_OF_BOMBS);
+    bd = new Board(numOfRows, numOfColumns, numOfBombs);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(NUM_OF_ROWS * CELL_SIZE + rightIndent,
-        NUM_OF_COLUMNS * CELL_SIZE + downIndent);
+    frame.setSize(numOfRows * CELL_SIZE + RIGHT_INDENT,
+        numOfColumns * CELL_SIZE + LEFT_INDENT);
     frame.setLocationRelativeTo(null);
 
     newGameMenuItem.addActionListener(new NewGameMenuItemListener());

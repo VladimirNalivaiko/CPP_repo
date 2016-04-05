@@ -32,14 +32,14 @@ public class FirstMenu {
   private static JLabel exitLabel;
   private static BgPanel firstPanel;
   private static JFrame firstFrame;
-  private final int rightIndent = 500;
-  private final int leftIndent = 25;
-  private final int minNumber = 10;
-  private final int maxNumber = 100;
-  private final int xFrameSize = 800;
-  private final int yFrameSize = 600;
-  private final Color labelsColor = new Color(130, 130, 130);
-  private final Color mouseEnteredColor = new Color(230, 190, 130);
+  private final int RIGHT_INDENT = 500;
+  private final int LEFT_INDENT = 25;
+  private final int MIN_NUMBER = 10;
+  private final int MAX_NUMBER = 100;
+  private final int FRAME_WIDTH = 800;
+  private final int FRAME_HIGHT = 600;
+  private final Color LABELS_COLOR = new Color(130, 130, 130);
+  private final Color MOUSE_ENTERED_COLOR = new Color(230, 190, 130);
   int[] numOf = new int[3];
 
   public FirstMenu() {
@@ -47,13 +47,13 @@ public class FirstMenu {
     newGameLabel = new JLabel("New Game");
     settingsLabel = new JLabel("Settings");
     exitLabel = new JLabel("Exit");
-    firstFrame.setSize(xFrameSize, yFrameSize);
+    firstFrame.setSize(FRAME_WIDTH, FRAME_HIGHT);
     firstFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     Font font = new Font("Modern No. 20", Font.PLAIN, 30);
     newGameLabel.setFont(font);
     settingsLabel.setFont(font);
     exitLabel.setFont(font);
-    newGameLabel.setForeground(labelsColor);
+    newGameLabel.setForeground(LABELS_COLOR);
     settingsLabel.setForeground(newGameLabel.getForeground());
     exitLabel.setForeground(newGameLabel.getForeground());
     firstFrame.setLocationRelativeTo(null);
@@ -63,13 +63,13 @@ public class FirstMenu {
 
     firstPanel.add(newGameLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0,
         GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
-        new Insets(230, 0, leftIndent, rightIndent), 0, 0));
+        new Insets(230, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
     firstPanel.add(settingsLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0,
         GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-        new Insets(0, 0, leftIndent, rightIndent), 0, 0));
+        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
     firstPanel.add(exitLabel, new GridBagConstraints(0, 2, 1, 1, 0, 0,
         GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-        new Insets(0, 0, leftIndent, rightIndent), 0, 0));
+        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
 
     firstFrame.add(firstPanel);
     firstFrame.setVisible(true);
@@ -87,12 +87,12 @@ public class FirstMenu {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-      exitLabel.setForeground(mouseEnteredColor);
+      exitLabel.setForeground(MOUSE_ENTERED_COLOR);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-      exitLabel.setForeground(labelsColor);
+      exitLabel.setForeground(LABELS_COLOR);
     }
 
     @Override
@@ -109,12 +109,12 @@ public class FirstMenu {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-      settingsLabel.setForeground(mouseEnteredColor);
+      settingsLabel.setForeground(MOUSE_ENTERED_COLOR);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-      settingsLabel.setForeground(labelsColor);
+      settingsLabel.setForeground(LABELS_COLOR);
     }
 
     @Override
@@ -132,12 +132,12 @@ public class FirstMenu {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-      newGameLabel.setForeground(mouseEnteredColor);
+      newGameLabel.setForeground(MOUSE_ENTERED_COLOR);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-      newGameLabel.setForeground(labelsColor);
+      newGameLabel.setForeground(LABELS_COLOR);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class FirstMenu {
       rowsLabel = new JLabel("Choose number of rows");
       columnsLabel = new JLabel("Choose number of columns");
       bombsLabel = new JLabel("Choose number of bombs");
-      for (int i = minNumber; i < maxNumber; i++) {
+      for (int i = MIN_NUMBER; i < MAX_NUMBER; i++) {
         rows.addItem(i);
         columns.addItem(i);
         bombs.addItem(i);
