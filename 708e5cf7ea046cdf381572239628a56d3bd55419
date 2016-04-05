@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_96105150",
+        "filename": "LAB 1, 2/Cell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1007669
+      },
+      "writtenOn": "2016-04-05T18:40:00Z",
+      "side": 1,
+      "message": "magic number, maybe enum",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 26
+      },
+      "revId": "708e5cf7ea046cdf381572239628a56d3bd55419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_f608bd2a",
+        "filename": "LAB 1, 2/FirstMenu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1007669
+      },
+      "writtenOn": "2016-04-05T18:40:00Z",
+      "side": 1,
+      "message": "to interface, use on other file without changing",
+      "range": {
+        "startLine": 48,
+        "startChar": 22,
+        "endLine": 48,
+        "endChar": 32
+      },
+      "revId": "708e5cf7ea046cdf381572239628a56d3bd55419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_16044113",
+        "filename": "LAB 1, 2/Start.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1007669
+      },
+      "writtenOn": "2016-04-05T18:40:00Z",
+      "side": 1,
+      "message": "magic number",
+      "range": {
+        "startLine": 23,
+        "startChar": 19,
+        "endLine": 23,
+        "endChar": 21
+      },
+      "revId": "708e5cf7ea046cdf381572239628a56d3bd55419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
