@@ -30,6 +30,7 @@ public class FirstMenu {
   private static JLabel newGameLabel;
   private static JLabel settingsLabel;
   private static JLabel exitLabel;
+  private static JLabel botLabel;
   private static BgPanel firstPanel;
   private static JFrame firstFrame;
   private final int RIGHT_INDENT = 500;
@@ -46,6 +47,7 @@ public class FirstMenu {
     firstFrame = new JFrame("MinerSweeper");
     newGameLabel = new JLabel("New Game");
     settingsLabel = new JLabel("Settings");
+    botLabel = new JLabel("Bot");
     exitLabel = new JLabel("Exit");
     firstFrame.setSize(FRAME_WIDTH, FRAME_HIGHT);
     firstFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,8 +55,10 @@ public class FirstMenu {
     newGameLabel.setFont(font);
     settingsLabel.setFont(font);
     exitLabel.setFont(font);
+    botLabel.setFont(font);
     newGameLabel.setForeground(LABELS_COLOR);
     settingsLabel.setForeground(newGameLabel.getForeground());
+    botLabel.setForeground(newGameLabel.getForeground());
     exitLabel.setForeground(newGameLabel.getForeground());
     firstFrame.setLocationRelativeTo(null);
 
@@ -67,13 +71,17 @@ public class FirstMenu {
     firstPanel.add(settingsLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0,
         GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
         new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(exitLabel, new GridBagConstraints(0, 2, 1, 1, 0, 0,
+    firstPanel.add(botLabel, new GridBagConstraints(0, 2, 1, 1, 0, 0,
+        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(exitLabel, new GridBagConstraints(0, 3, 1, 1, 0, 0,
         GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
         new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
 
     firstFrame.add(firstPanel);
     firstFrame.setVisible(true);
     settingsLabel.addMouseListener(new settingsLabelListener());
+    botLabel.addMouseListener(new BotLabelListener());
     exitLabel.addMouseListener(new ExitLabelListener());
     newGameLabel.addMouseListener(new NewGameLabelListener());
   }
@@ -123,10 +131,43 @@ public class FirstMenu {
     @Override
     public void mouseReleased(MouseEvent e) {}
   }
+  public class BotLabelListener implements MouseListener {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+      try {
+        firstFrame.dispose();
+        new Start(numOf, true);
+      } catch (InterruptedException e1) {
+        e1.printStackTrace();
+      }
+
+      firstFrame.dispose();
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+      botLabel.setForeground(MOUSE_ENTERED_COLOR);
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+      botLabel.setForeground(LABELS_COLOR);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+  }
   public class NewGameLabelListener implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
-      new Start(numOf);
+      try {
+        new Start(numOf, false);
+      } catch (InterruptedException e1) {
+        e1.printStackTrace();
+      }
       firstFrame.dispose();
     }
 
@@ -172,20 +213,20 @@ public class FirstMenu {
       rows = new JComboBox<Integer>();
       columns = new JComboBox<Integer>();
       bombs = new JComboBox<Integer>();
-      rowsLabel = new JLabel("Choose number of rows");
       columnsLabel = new JLabel("Choose number of columns");
+      rowsLabel = new JLabel("Choose number of rows");
       bombsLabel = new JLabel("Choose number of bombs");
       for (int i = MIN_NUMBER; i < MAX_NUMBER; i++) {
-        rows.addItem(i);
         columns.addItem(i);
+        rows.addItem(i);
         bombs.addItem(i);
       }
       settingsFrame = new JFrame("Settings");
       settingsFrame.setLayout(new GridLayout(4, 2));
-      settingsFrame.add(rowsLabel);
-      settingsFrame.add(rows);
       settingsFrame.add(columnsLabel);
       settingsFrame.add(columns);
+      settingsFrame.add(rowsLabel);
+      settingsFrame.add(rows);
       settingsFrame.add(bombsLabel);
       settingsFrame.add(bombs);
       settingsFrame.add(okButton, new BorderLayout().EAST);
@@ -199,8 +240,10 @@ public class FirstMenu {
       @Override
       public void actionPerformed(ActionEvent arg0) {
         numOf[0] = (int) columns.getSelectedItem();
+        System.out.println("numOf[0] = " + numOf[0]);
         numOf[1] = (int) rows.getSelectedItem();
         numOf[2] = (int) bombs.getSelectedItem();
+        System.out.println("Before settingsFrame.dispose()");
         settingsFrame.dispose();
       }
     }

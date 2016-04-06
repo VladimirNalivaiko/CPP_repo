@@ -5,12 +5,15 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
 /**
  * Initializes the start of the game.
+ * 
  * @author Vladimir
  * 
  */
 public class Start {
+  private static boolean isBot;
   private static Board bd;
   private static JFrame frame;
   private int numOfBombs = 10;
@@ -20,11 +23,13 @@ public class Start {
   private final int RIGHT_INDENT = 6;
   private final int LEFT_INDENT = 52;
   private final int MIN_SIZE = 10;
-  Start(int numOf[]) {
-    if (numOf[0] > MIN_SIZE){
+
+  Start(int numOf[], boolean bot) throws InterruptedException {
+    isBot = bot;
+    if (numOf[0] > MIN_SIZE) {
       numOfColumns = numOf[0];
     }
-    if (numOf[1] > MIN_SIZE){
+    if (numOf[1] > MIN_SIZE) {
       numOfRows = numOf[1];
     }
     if (numOf[2] > MIN_SIZE) {
@@ -36,10 +41,10 @@ public class Start {
     JMenuItem newGameMenuItem = new JMenuItem("New Game");
     JMenuItem backToMenuItem = new JMenuItem("Back to menu");
     JMenuItem exitMenuItem = new JMenuItem("Exit");
-    bd = new Board(numOfRows, numOfColumns, numOfBombs);
+
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(numOfRows * CELL_SIZE + RIGHT_INDENT,
-        numOfColumns * CELL_SIZE + LEFT_INDENT);
+    frame.setSize(numOfColumns * CELL_SIZE + RIGHT_INDENT, 
+        numOfRows * CELL_SIZE + LEFT_INDENT);
     frame.setLocationRelativeTo(null);
 
     newGameMenuItem.addActionListener(new NewGameMenuItemListener());
@@ -51,14 +56,22 @@ public class Start {
     gameMenu.add(exitMenuItem);
     menu.add(gameMenu);
     frame.setJMenuBar(menu);
-    frame.add(bd);
     frame.setVisible(true);
     frame.setResizable(false);
+    frame.repaint();
+    bd = new Board(numOfColumns, numOfRows, numOfBombs, isBot);
+    frame.add(bd);
   }
 
   static class NewGameMenuItemListener implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
-      bd.ResetGame();
+      if (!isBot) {
+        try {
+          bd.ResetGame();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      } 
     }
   }
 

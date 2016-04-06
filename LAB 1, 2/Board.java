@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -9,24 +8,30 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 /**
  * Panel, that contains cells.
+ * 
  * @author Vladimir
  *
  */
 public class Board extends JPanel {
+  private Bot bot;
   private final int CELL_SIZE = 15;
-  private int numOfBombs = 10;
+  private static boolean isBot;
   private static int numOfUncoveredBombs = 10;
   private static int numOfWrongFlags = 0;
-  private int numOfRows = 10;
-  private int numOfColumns = 10;
+  private int numOfRows;
+  private int numOfColumns;
+  private int numOfBombs;
   private static boolean inGame;
+  private int BOT_SLEEP = 500;
 
-  static Image[] img = new Image[13];
-  static private Cell[][] field;
+  static protected Image[] img = new Image[13];
+  static protected Cell[][] field;
 
-  public Board(int ñolumns, int rows, int bombs) {
+  public Board(int ñolumns, int rows, int bombs, boolean isBot) throws InterruptedException {
+    this.isBot = isBot;
     numOfColumns = ñolumns;
     numOfRows = rows;
     numOfBombs = bombs;
@@ -35,43 +40,49 @@ public class Board extends JPanel {
     for (int i = 0; i < 13; i++) {
       img[i] = (new ImageIcon(i + ".png")).getImage();
     }
-    this.addMouseListener(new CellListener());
     Init();
-    this.setBackground(Color.BLUE);
+    if (!isBot) {
+      this.addMouseListener(new CellListener());
+      
+    }
+    else { 
+      bot = new Bot(this);
+      inGame = true;
+    }
   }
 
-  public void finish() {
+  public void finish() throws InterruptedException {
     this.repaint();
     if (numOfUncoveredBombs != 0) {
-      JOptionPane.showMessageDialog(new JFrame(), "     You lose");
+      JOptionPane.showMessageDialog(new JFrame(), "                You lose");
     } else {
-      JOptionPane.showMessageDialog(new JFrame(), "     You win");
+      JOptionPane.showMessageDialog(new JFrame(), "                You win");
     }
-    inGame = false;
+    inGame = true;
   }
 
-  public void Init() {
+  public void Init() throws InterruptedException {
     field = new Cell[numOfRows][numOfColumns];
     for (int i = 0; i < numOfRows; i++) {
       for (int j = 0; j < numOfColumns; j++) {
         field[i][j] = new Cell(j, i);
       }
-    }
+    }    
   }
 
-  public void ResetGame() {
+  public void ResetGame() throws InterruptedException {
     System.out.println("RESETGAME");
     for (int i = 0; i < numOfRows; i++) {
       for (int j = 0; j < numOfColumns; j++) {
         field[i][j].StartNewGame();
       }
-      repaint();
     }
+    repaint();
     numOfUncoveredBombs = numOfBombs;
     inGame = true;
   }
 
-  public void newGame() {
+  public void newGame() throws InterruptedException {
     Random random = new Random();
     int numOfPastedBombs = 0;
     int xPositionOfPasteBomb = 0;
@@ -85,8 +96,21 @@ public class Board extends JPanel {
         numOfPastedBombs++;
       }
     }
-
     inGame = true;
+  }
+
+  public void botGaming() throws InterruptedException {
+    Random random = new Random();
+    int xPositionOfBotChoose = 0;
+    int yPositionOfBotChoose = 0;
+    while (!field[0][0].getIsAnyBanged()) {
+      xPositionOfBotChoose = Math.abs(random.nextInt() % numOfRows);
+      yPositionOfBotChoose = Math.abs(random.nextInt() % numOfColumns);
+      if (!(field[yPositionOfBotChoose][xPositionOfBotChoose].getIsOpen())) {
+        Thread.sleep(BOT_SLEEP);
+        this.actionAnalisys(xPositionOfBotChoose, yPositionOfBotChoose);
+      }
+    }
   }
 
   public void findEmptyCells(int x, int y) {
@@ -96,9 +120,8 @@ public class Board extends JPanel {
         field[y][x].setIsOpen(true);
         return;
       }
-      if (y != 0) { 
-        if (findNearBombs(x, y - 1) == 0 &&
-            !field[y - 1][x].getIsOpen()) {
+      if (y != 0) {
+        if (findNearBombs(x, y - 1) == 0 && !field[y - 1][x].getIsOpen()) {
           field[y - 1][x].setIsOpen(true);
           field[y - 1][x].setToRepaint(true);
           findEmptyCells(x, y - 1);
@@ -107,9 +130,8 @@ public class Board extends JPanel {
           field[y - 1][x].setToRepaint(true);
         }
       }
-      if (x != 0) { 
-        if (findNearBombs(x - 1, y) == 0 &&
-            !field[y][x - 1].getIsOpen()) {
+      if (x != 0) {
+        if (findNearBombs(x - 1, y) == 0 && !field[y][x - 1].getIsOpen()) {
           field[y][x - 1].setToRepaint(true);
           field[y][x - 1].setIsOpen(true);
           findEmptyCells(x - 1, y);
@@ -119,8 +141,7 @@ public class Board extends JPanel {
         }
       }
       if (y != numOfRows - 1) {
-        if (findNearBombs(x, y + 1) == 0 &&
-            !field[y + 1][x].getIsOpen()) {
+        if (findNearBombs(x, y + 1) == 0 && !field[y + 1][x].getIsOpen()) {
           field[y + 1][x].setIsOpen(true);
           field[y + 1][x].setToRepaint(true);
           findEmptyCells(x, y + 1);
@@ -130,8 +151,7 @@ public class Board extends JPanel {
         }
       }
       if (x != numOfColumns - 1) {
-        if (findNearBombs(x + 1, y) == 0 &&
-            !field[y][x + 1].getIsOpen()) {
+        if (findNearBombs(x + 1, y) == 0 && !field[y][x + 1].getIsOpen()) {
           field[y][x + 1].setIsOpen(true);
           field[y][x + 1].setToRepaint(true);
           findEmptyCells(x + 1, y);
@@ -141,8 +161,7 @@ public class Board extends JPanel {
         }
       }
       if (y != 0 && x != 0) {
-        if (findNearBombs(x - 1, y - 1) == 0 &&
-            !field[y - 1][x - 1].getIsOpen()) {
+        if (findNearBombs(x - 1, y - 1) == 0 && !field[y - 1][x - 1].getIsOpen()) {
           field[y - 1][x - 1].setIsOpen(true);
           field[y - 1][x - 1].setToRepaint(true);
           findEmptyCells(x - 1, y - 1);
@@ -152,8 +171,7 @@ public class Board extends JPanel {
         }
       }
       if (y != numOfRows - 1 && x != 0) {
-        if (findNearBombs(x - 1, y + 1) == 0 &&
-            !field[y + 1][x - 1].getIsOpen()) {
+        if (findNearBombs(x - 1, y + 1) == 0 && !field[y + 1][x - 1].getIsOpen()) {
           field[y + 1][x - 1].setIsOpen(true);
           field[y + 1][x - 1].setToRepaint(true);
           findEmptyCells(x - 1, y + 1);
@@ -162,21 +180,18 @@ public class Board extends JPanel {
           field[y + 1][x - 1].setToRepaint(true);
         }
       }
-      if (y != numOfRows - 1 && x != numOfColumns - 1) {  
-        if (findNearBombs(x + 1, y + 1) == 0 &&
-            !field[y + 1][x + 1].getIsOpen()) {
+      if (y != numOfRows - 1 && x != numOfColumns - 1) {
+        if (findNearBombs(x + 1, y + 1) == 0 && !field[y + 1][x + 1].getIsOpen()) {
           field[y + 1][x + 1].setIsOpen(true);
           field[y + 1][x + 1].setToRepaint(true);
           findEmptyCells(x + 1, y + 1);
-        }
-        else {
+        } else {
           field[y + 1][x + 1].setIsOpen(true);
           field[y + 1][x + 1].setToRepaint(true);
         }
       }
       if (y != 0 && x != numOfColumns - 1) {
-        if (findNearBombs(x + 1, y - 1) == 0 &&
-            !field[y - 1][x + 1].getIsOpen()) {
+        if (findNearBombs(x + 1, y - 1) == 0 && !field[y - 1][x + 1].getIsOpen()) {
           field[y - 1][x + 1].setIsOpen(true);
           field[y - 1][x + 1].setToRepaint(true);
           findEmptyCells(x + 1, y - 1);
@@ -210,7 +225,7 @@ public class Board extends JPanel {
         numOfNearBombs++;
       }
     }
-    if (y != numOfRows - 1) { 
+    if (y != numOfRows - 1) {
       if (field[y + 1][x].getIsBomb()) {
         numOfNearBombs++;
       }
@@ -234,23 +249,45 @@ public class Board extends JPanel {
     return numOfNearBombs;
   }
 
-  class CellListener implements MouseListener {
+  public void actionAnalisys(int pressedCol, int pressedRow) throws InterruptedException {
+    Cell pressedCell = field[pressedRow][pressedCol];
+    if (pressedCell.getIsAnyBanged())
+      return;
+    if (!pressedCell.getIsAnyClicked()) {
+      pressedCell.setIsOpen(true);
+      newGame();
+      findEmptyCells(pressedCol, pressedRow);
+      pressedCell.setIsAnyClicked(true);
+      repaint();
+      return;
+    }
+    if (pressedCell.getIsBomb() && !(pressedCell.getIsOpen())) {
+      pressedCell.setIsOpen(true);
+      pressedCell.setIsAnyBanged(true);
+      finish();
+      return;
+    }
+    if (!pressedCell.getIsOpen()) {
+      findEmptyCells(pressedCol, pressedRow);
+      pressedCell.setIsOpen(true);
+      repaint();
+    }
+  }
 
+  class CellListener implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent event) {
 
       int pressedCol = event.getX() / CELL_SIZE;
       int pressedRow = event.getY() / CELL_SIZE;
-
       if ((pressedCol >= numOfColumns) || (pressedRow >= numOfRows))
         return;
 
       Cell pressedCell = field[pressedRow][pressedCol];
-      if (pressedCell.getIsAnyBanged() || numOfUncoveredBombs == 0 &&
-          numOfWrongFlags == 0)
+      if (pressedCell.getIsAnyBanged() || numOfUncoveredBombs == 0 && numOfWrongFlags == 0)
         return;
-      if (event.getButton() == MouseEvent.BUTTON3 && !pressedCell.getIsOpen()){
+      if (event.getButton() == MouseEvent.BUTTON3 && !pressedCell.getIsOpen()) {
         if (!pressedCell.getIsSooposedToBeBomb()) {
           if (pressedCell.getIsBomb())
             numOfUncoveredBombs--;
@@ -265,30 +302,22 @@ public class Board extends JPanel {
             numOfWrongFlags--;
         }
         if (numOfUncoveredBombs == 0 && numOfWrongFlags == 0) {
-          finish();
+          try {
+            finish();
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
           return;
         }
         repaint();
         return;
       }
-      if (!pressedCell.getIsAnyClicked()) {
-        pressedCell.setIsOpen(true);
-        newGame();
-        findEmptyCells(pressedCol, pressedRow);
-        pressedCell.setIsAnyClicked(true);
-        repaint();
-        return;
-      }
-      if (pressedCell.getIsBomb() && !(pressedCell.getIsOpen())) {
-        pressedCell.setIsOpen(true);
-        pressedCell.setIsAnyBanged(true);
-        finish();
-        return;
-      }
-      if (!pressedCell.getIsOpen()) {
-        findEmptyCells(pressedCol, pressedRow);
-        pressedCell.setIsOpen(true);
-        repaint();
+      try {
+        actionAnalisys(pressedCol, pressedRow);
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
       }
     }
 
@@ -325,7 +354,6 @@ public class Board extends JPanel {
           imageType = field[i][j].getVariantOfImage();
           g.drawImage(img[imageType], xPosition, yPosition, this);
         }
-
       }
     }
   }
