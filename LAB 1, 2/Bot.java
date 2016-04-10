@@ -1,4 +1,10 @@
+import java.io.IOException;
 
+/**
+ * Class for bot.
+ * @author Vladimir
+ *
+ */
 public class Bot implements Runnable {
   private Board bd;
   private Thread thread;
@@ -17,6 +23,11 @@ public class Bot implements Runnable {
   public void run() {
     try {
       bd.botGaming();
+    } catch (InterruptedException | IOException e) {
+      e.printStackTrace();
+    }
+    try {
+      thread.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

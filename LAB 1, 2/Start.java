@@ -1,5 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -13,19 +18,30 @@ import javax.swing.JMenuItem;
  * 
  */
 public class Start {
+  private File boardFile = new File("Board.txt");
   private static boolean isBot;
+  private static boolean isReplay;
   private static Board bd;
   private static JFrame frame;
   private int numOfBombs = 10;
   private int numOfRows = 10;
   private int numOfColumns = 10;
+  private static File replayFile;
   private final int CELL_SIZE = 15;
   private final int RIGHT_INDENT = 6;
   private final int LEFT_INDENT = 52;
   private final int MIN_SIZE = 10;
 
-  Start(int numOf[], boolean bot) throws InterruptedException {
-    isBot = bot;
+  Start(int numOf[], boolean isBot, boolean isReplay) throws InterruptedException, IOException {
+    if(isReplay){
+      InputStream boardInputStream = new FileInputStream(boardFile);
+      numOfColumns = boardInputStream.read();
+      numOfRows = boardInputStream.read();
+      numOfBombs = boardInputStream.read();      
+      boardInputStream.close();
+    }
+    this.isBot = isBot;
+    this.isReplay = isReplay;
     if (numOf[0] > MIN_SIZE) {
       numOfColumns = numOf[0];
     }
@@ -43,8 +59,7 @@ public class Start {
     JMenuItem exitMenuItem = new JMenuItem("Exit");
 
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(numOfColumns * CELL_SIZE + RIGHT_INDENT, 
-        numOfRows * CELL_SIZE + LEFT_INDENT);
+    frame.setSize(numOfColumns * CELL_SIZE + RIGHT_INDENT, numOfRows * CELL_SIZE + LEFT_INDENT);
     frame.setLocationRelativeTo(null);
 
     newGameMenuItem.addActionListener(new NewGameMenuItemListener());
@@ -59,19 +74,17 @@ public class Start {
     frame.setVisible(true);
     frame.setResizable(false);
     frame.repaint();
-    bd = new Board(numOfColumns, numOfRows, numOfBombs, isBot);
+    bd = new Board(numOfColumns, numOfRows, numOfBombs, isBot, isReplay);
     frame.add(bd);
   }
 
   static class NewGameMenuItemListener implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
-      if (!isBot) {
-        try {
-          bd.ResetGame();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      } 
+      try {
+        bd.ResetGame();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
   }
 

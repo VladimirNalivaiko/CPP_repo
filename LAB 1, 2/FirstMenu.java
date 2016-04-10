@@ -28,9 +28,11 @@ import javax.swing.JPanel;
  */
 public class FirstMenu {
   private static JLabel newGameLabel;
+  private static JLabel botLabel;
+  private static JLabel replayLabel;
   private static JLabel settingsLabel;
   private static JLabel exitLabel;
-  private static JLabel botLabel;
+  
   private static BgPanel firstPanel;
   private static JFrame firstFrame;
   private final int RIGHT_INDENT = 500;
@@ -46,6 +48,7 @@ public class FirstMenu {
   public FirstMenu() {
     firstFrame = new JFrame("MinerSweeper");
     newGameLabel = new JLabel("New Game");
+    replayLabel = new JLabel("Replay");
     settingsLabel = new JLabel("Settings");
     botLabel = new JLabel("Bot");
     exitLabel = new JLabel("Exit");
@@ -53,10 +56,12 @@ public class FirstMenu {
     firstFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     Font font = new Font("Modern No. 20", Font.PLAIN, 30);
     newGameLabel.setFont(font);
+    replayLabel.setFont(font);
     settingsLabel.setFont(font);
     exitLabel.setFont(font);
     botLabel.setFont(font);
     newGameLabel.setForeground(LABELS_COLOR);
+    replayLabel.setForeground(newGameLabel.getForeground());
     settingsLabel.setForeground(newGameLabel.getForeground());
     botLabel.setForeground(newGameLabel.getForeground());
     exitLabel.setForeground(newGameLabel.getForeground());
@@ -68,19 +73,23 @@ public class FirstMenu {
     firstPanel.add(newGameLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0,
         GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
         new Insets(230, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(settingsLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0,
+    firstPanel.add(replayLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0,
         GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
         new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(botLabel, new GridBagConstraints(0, 2, 1, 1, 0, 0,
+    firstPanel.add(settingsLabel, new GridBagConstraints(0, 2, 1, 1, 0, 0,
         GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
         new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(exitLabel, new GridBagConstraints(0, 3, 1, 1, 0, 0,
+    firstPanel.add(botLabel, new GridBagConstraints(0, 3, 1, 1, 0, 0,
+        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(exitLabel, new GridBagConstraints(0, 4, 1, 1, 0, 0,
         GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
         new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
 
     firstFrame.add(firstPanel);
     firstFrame.setVisible(true);
-    settingsLabel.addMouseListener(new settingsLabelListener());
+    replayLabel.addMouseListener(new ReplayLabelListener());
+    settingsLabel.addMouseListener(new SettingsLabelListener());
     botLabel.addMouseListener(new BotLabelListener());
     exitLabel.addMouseListener(new ExitLabelListener());
     newGameLabel.addMouseListener(new NewGameLabelListener());
@@ -109,7 +118,7 @@ public class FirstMenu {
     @Override
     public void mouseReleased(MouseEvent e) {}
   }
-  public class settingsLabelListener implements MouseListener {
+  public class SettingsLabelListener implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
       new Settings();
@@ -131,13 +140,41 @@ public class FirstMenu {
     @Override
     public void mouseReleased(MouseEvent e) {}
   }
+  public class ReplayLabelListener implements MouseListener {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+      try {
+        firstFrame.dispose();
+        new Start(numOf, false, true);
+      } catch (InterruptedException | IOException e1) {
+        e1.printStackTrace();
+      }
+      firstFrame.dispose();
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+      replayLabel.setForeground(MOUSE_ENTERED_COLOR);
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+      replayLabel.setForeground(LABELS_COLOR);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+  }
   public class BotLabelListener implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
       try {
         firstFrame.dispose();
-        new Start(numOf, true);
-      } catch (InterruptedException e1) {
+        new Start(numOf, true, false);
+      } catch (InterruptedException | IOException e1) {
         e1.printStackTrace();
       }
 
@@ -164,8 +201,8 @@ public class FirstMenu {
     @Override
     public void mouseClicked(MouseEvent e) {
       try {
-        new Start(numOf, false);
-      } catch (InterruptedException e1) {
+        new Start(numOf, false, false);
+      } catch (InterruptedException | IOException e1) {
         e1.printStackTrace();
       }
       firstFrame.dispose();
