@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_ced50144",
+        "filename": "minesweeper/Bot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-13T19:44:55Z",
+      "side": 1,
+      "message": "bad name",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 18
+      },
+      "revId": "49c93aff3ba12734eae9735e1e82c12bba10fcfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_aecabd9f",
+        "filename": "minesweeper/Bot.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-13T19:44:55Z",
+      "side": 1,
+      "message": "Why you need this method?",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 3
+      },
+      "revId": "49c93aff3ba12734eae9735e1e82c12bba10fcfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
