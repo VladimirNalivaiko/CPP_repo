@@ -1,10 +1,5 @@
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,41 +7,36 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+public class Server implements Runnable {
 
-/**
- * Panel, that contains cells.
- * 
- * @author Vladimir
- *
- */
-public class Board extends JPanel {
-  private File userFile = new File("Replay.txt");
-  private File boardFile = new File("Board.txt");
   private Bot bot;
   private static boolean isBot;
   private Replay replay;
   private static boolean isReplay;
+  private File boardFile = new File("Board.txt");
+  private File userFile = new File("Replay.txt");
   private ArrayList<Integer> boardReplayArrayList = new ArrayList<Integer>();
   private ArrayList<Integer> userArrayList = new ArrayList<Integer>();
   private ArrayList<Integer> bombArrayList = new ArrayList<Integer>();
-  private final int CELL_SIZE = 15;
-  private static int numOfUncoveredBombs = 10;
-  private static int numOfWrongFlags = 0;
+  private Client client;
+  private Thread serverThread;
+  private int numOfUncoveredBombs = 10;
+  private int numOfWrongFlags = 0;
   private int numOfRows;
   private int numOfColumns;
   private int numOfBombs;
+  private boolean isStoped;
+
   private static boolean inGame;
-  private int SLEEP_TIME = 800;
 
-  static protected Image[] img = new Image[13];
-  static protected Cell[][] field;
+  protected Cell[][] field;
 
-  public Board(int ñolumns, int rows, int bombs, boolean isBot, boolean isReplay)
+  Server(int ñolumns, int rows, int bombs, boolean isBot, boolean isReplay)
       throws InterruptedException, IOException {
+    if (serverThread == null) {
+      serverThread = new Thread(this);
+      serverThread.start();
+    }
     if (isReplay) {
       InputStream boardInputStream = new FileInputStream(boardFile);
       numOfColumns = boardInputStream.read();
@@ -59,111 +49,81 @@ public class Board extends JPanel {
         bombArrayList.add(buf);
         buf = boardInputStream.read();
         bombArrayList.add(buf);
-      }      
+      }
       boardInputStream.close();
-      imageLoad();
       Init();
-      repaint();
       inGame = true;
       this.isReplay = isReplay;
       replay = new Replay(this);
     } else {
-      boardReplayArrayList.add(ñolumns);
-      boardReplayArrayList.add(rows);
-      boardReplayArrayList.add(bombs);
-
-      this.isBot = isBot;
       numOfColumns = ñolumns;
       numOfRows = rows;
       numOfBombs = bombs;
       numOfUncoveredBombs = numOfBombs;
-      imageLoad();
       Init();
-      if (!isBot) {
-        this.addMouseListener(new CellListener());
-
-      } else {
+      boardReplayArrayList.add(ñolumns);
+      boardReplayArrayList.add(rows);
+      boardReplayArrayList.add(bombs);
+      isStoped = false;
+      this.isBot = isBot;
+      if (isBot) {
         bot = new Bot(this);
         inGame = true;
       }
-    }
-  }
-  public void imageLoad(){
-    for (int i = 0; i < 13; i++) {
-      img[i] = (new ImageIcon(i + ".png")).getImage();
-    }
-  }
-  /**
-   * When mine banged.
-   * 
-   * @throws InterruptedException throws InterruptedException
-   * @throws IOException throws IOException
-   */
-  public void finish() throws InterruptedException, IOException {
-    this.repaint();
-    if (isReplay) {
-      JOptionPane.showMessageDialog(new JFrame(), "     Replay has stoped");
-    } else if (numOfUncoveredBombs != 0) {
-      JOptionPane.showMessageDialog(new JFrame(), "                You lose");
-    } else {
-      JOptionPane.showMessageDialog(new JFrame(), "                You win");
-    }
-
-    if (!isReplay) {
-      OutputStream boardOutPutStream = new FileOutputStream(boardFile);
-      for (int i = 0; i < boardReplayArrayList.size(); i++) {
-        boardOutPutStream.write(boardReplayArrayList.get(i).intValue());
-      }
-      boardOutPutStream.flush();
-      boardOutPutStream.close();
-
-      OutputStream userOutPutStream = new FileOutputStream(userFile);
-      for (int i = 0; i < userArrayList.size(); i++) {
-        userOutPutStream.write(userArrayList.get(i).intValue());
-      }
-      userOutPutStream.flush();
-      userOutPutStream.close();
-    }
-
-    inGame = true;
+    }    
   }
 
-  /**
-   * Initialize board.
-   * 
-   * @throws InterruptedException throws InterruptedException
-   */
+  public static boolean isReplay() {
+    return isReplay;
+  }
+
+  public static void setReplay(boolean isReplay) {
+    Server.isReplay = isReplay;
+  }
+
+  void setClient(Client client) {
+    this.client = client;
+  }
+
+  public boolean getThreadCondition() {
+    return serverThread.isAlive();
+  }
+
+  void writeReplay() throws IOException {
+    OutputStream boardOutPutStream = new FileOutputStream(boardFile);
+    for (int i = 0; i < boardReplayArrayList.size(); i++) {
+      boardOutPutStream.write(boardReplayArrayList.get(i).intValue());
+    }
+    boardOutPutStream.flush();
+    boardOutPutStream.close();
+
+    OutputStream userOutPutStream = new FileOutputStream(userFile);
+    for (int i = 0; i < userArrayList.size(); i++) {
+      userOutPutStream.write(userArrayList.get(i).intValue());
+    }
+    userOutPutStream.flush();
+    userOutPutStream.close();
+    userArrayList.clear();
+    boardReplayArrayList.clear();
+    bombArrayList.clear();
+  }
+
   public void Init() throws InterruptedException {
+
     field = new Cell[numOfRows][numOfColumns];
     for (int i = 0; i < numOfRows; i++) {
       for (int j = 0; j < numOfColumns; j++) {
         field[i][j] = new Cell(j, i);
       }
     }
-    repaint();
   }
 
-  public void ResetGame() throws InterruptedException {
-    for (int i = 0; i < numOfRows; i++) {
-      for (int j = 0; j < numOfColumns; j++) {
-        field[i][j].StartNewGame();
-      }
-    }
-    repaint();
-    numOfUncoveredBombs = numOfBombs;
-    inGame = true;
-  }
-
-  /**
-   * Paste bomb after player's click
-   * 
-   * @throws InterruptedException throws InterruptedException
-   */
   public void newGame() throws InterruptedException {
     Random random = new Random();
     int numOfPastedBombs = 0;
     int xPositionOfPasteBomb = 0;
     int yPositionOfPasteBomb = 0;
+
     if (isReplay) {
       for (int i = 0; i < numOfBombs * 2;) {
         xPositionOfPasteBomb = bombArrayList.get(i++);
@@ -182,53 +142,13 @@ public class Board extends JPanel {
           boardReplayArrayList.add(yPositionOfPasteBomb);
         }
       }
+      inGame = true;
     }
-    inGame = true;
-  }
-
-  /**
-   * Function for bot
-   * 
-   * @throws InterruptedException throws InterruptedException
-   * @throws IOException throws IOException
-   */
-  public void botGaming() throws InterruptedException, IOException {
-    Random random = new Random();
-    int xPositionOfBotChoose = 0;
-    int yPositionOfBotChoose = 0;
-    while (!field[0][0].getIsAnyBanged()) {
-      xPositionOfBotChoose = Math.abs(random.nextInt() % numOfRows);
-      yPositionOfBotChoose = Math.abs(random.nextInt() % numOfColumns);
-      if (!(field[yPositionOfBotChoose][xPositionOfBotChoose].getIsOpen())) {
-        Thread.sleep(SLEEP_TIME);
-        this.actionAnalisys(xPositionOfBotChoose, yPositionOfBotChoose);
-      }
-    }
-  }
-
-  public void replayGaming() throws IOException, InterruptedException {
-    InputStream userInputStream = new FileInputStream(userFile);
-    int xPositionOfBotChoose = 0;
-    int yPositionOfBotChoose = 0;
-    int mouseButtonVariant = 0;
-    while (!field[0][0].getIsAnyBanged()) {
-      xPositionOfBotChoose = userInputStream.read();
-      yPositionOfBotChoose = userInputStream.read();
-      mouseButtonVariant = userInputStream.read();
-      Thread.sleep(SLEEP_TIME);
-      if (mouseButtonVariant == 0) {
-        this.actionAnalisys(xPositionOfBotChoose, yPositionOfBotChoose);
-      }
-      if (mouseButtonVariant == 1) {
-        this.rightMouseButtonListener(xPositionOfBotChoose, yPositionOfBotChoose);
-      }
-    }
-    userInputStream.close();
   }
 
   /**
    * This function finds empty cells
-   * 
+   *
    * @param x cell's column
    * @param y cell's row
    */
@@ -391,14 +311,15 @@ public class Board extends JPanel {
     if (!pressedCell.getIsAnyClicked()) {
       pressedCell.setIsOpen(true);
       newGame();
+
       if (!isReplay) {
         userArrayList.add(pressedCol);
         userArrayList.add(pressedRow);
         userArrayList.add(0);
       }
+      client.repaint();
       findEmptyCells(pressedCol, pressedRow);
       pressedCell.setIsAnyClicked(true);
-      repaint();
       return;
     }
     if (pressedCell.getIsBomb() && !(pressedCell.getIsOpen())) {
@@ -409,7 +330,12 @@ public class Board extends JPanel {
         userArrayList.add(pressedRow);
         userArrayList.add(0);
       }
-      finish();
+      if (!isReplay) {
+        writeReplay();
+      }
+      isReplay = false;
+      isBot = false;
+      client.finish();
       return;
     }
     if (!pressedCell.getIsOpen()) {
@@ -420,61 +346,12 @@ public class Board extends JPanel {
       }
       findEmptyCells(pressedCol, pressedRow);
       pressedCell.setIsOpen(true);
-      repaint();
+      client.repaint();
     }
   }
 
-  class CellListener implements MouseListener {
-
-    @Override
-    public void mouseClicked(MouseEvent event) {
-
-      int pressedCol = event.getX() / CELL_SIZE;
-      int pressedRow = event.getY() / CELL_SIZE;
-      if ((pressedCol >= numOfColumns) || (pressedRow >= numOfRows))
-        return;
-
-
-      Cell pressedCell = field[pressedRow][pressedCol];
-      if (pressedCell.getIsAnyBanged() || numOfUncoveredBombs == 0 && numOfWrongFlags == 0)
-        return;
-
-      if (event.getButton() == MouseEvent.BUTTON3 && !pressedCell.getIsOpen()) {
-        rightMouseButtonListener(pressedCol, pressedRow);
-        return;
-      }
-
-      try {
-        actionAnalisys(pressedCol, pressedRow);
-      } catch (InterruptedException | IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent event) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent event) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-
-    }
-
-  }
-
-  void rightMouseButtonListener(int pressedCol, int pressedRow) {
+  void rightMouseButtonListener(int pressedCol, int pressedRow)
+      throws InterruptedException, IOException {
     Cell pressedCell = field[pressedRow][pressedCol];
     if (!isReplay) {
       userArrayList.add(pressedCol);
@@ -495,33 +372,70 @@ public class Board extends JPanel {
         numOfWrongFlags--;
     }
     if (numOfUncoveredBombs == 0 && numOfWrongFlags == 0) {
-      try {
-        finish();
-      } catch (InterruptedException | IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+      if (!isReplay) {
+        writeReplay();
       }
+      client.finish();
       return;
     }
-    repaint();
     return;
   }
 
-  public void paint(Graphics g) {
-    for (int i = 0; i < numOfRows; i++) {
-      for (int j = 0; j < numOfColumns; j++) {
-        if (field[i][j].getToRepaint()) {
-          int xPosition, yPosition;
-          xPosition = (j * CELL_SIZE);
-          yPosition = (i * CELL_SIZE);
-          int imageType;
-          imageType = field[i][j].getVariantOfImage();
-          g.drawImage(img[imageType], xPosition, yPosition, this);
-        }
-      }
+
+  public Cell[][] getField() {
+    return field;
+  }
+
+  public Cell getFieldElement(int i, int j) {
+    return field[i][j];
+  }
+
+  public int getNumOfUncoveredBombs() {
+    return numOfUncoveredBombs;
+  }
+
+  public void setNumOfUncoveredBombs(int numOfUncoveredBombs) {
+    this.numOfUncoveredBombs = numOfUncoveredBombs;
+  }
+
+  public int getNumOfWrongFlags() {
+    return numOfWrongFlags;
+  }
+
+  public void setNumOfWrongFlags(int numOfWrongFlags) {
+    this.numOfWrongFlags = numOfWrongFlags;
+  }
+
+  public int getNumOfRows() {
+    return numOfRows;
+  }
+
+  public void setNumOfRows(int numOfRows) {
+    this.numOfRows = numOfRows;
+  }
+
+  public int getNumOfColumns() {
+    return numOfColumns;
+  }
+
+  public void setNumOfColumns(int numOfColumns) {
+    this.numOfColumns = numOfColumns;
+  }
+
+  public int getNumOfBombs() {
+    return numOfBombs;
+  }
+
+  public void setNumOfBombs(int numOfBombs) {
+    this.numOfBombs = numOfBombs;
+  }
+
+  @Override
+  public void run() {
+
+    while (!serverThread.isInterrupted()) {
+
     }
   }
 
 }
-
-

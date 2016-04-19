@@ -20,9 +20,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 /**
- * First menu of the game.
- * Contains New Game, Settings and Exit buttons.
+ * First menu of the game. Contains New Game, Settings and Exit buttons.
+ * 
  * @author Vladimir
  *
  */
@@ -32,7 +33,7 @@ public class FirstMenu {
   private static JLabel replayLabel;
   private static JLabel settingsLabel;
   private static JLabel exitLabel;
-  
+
   private static BgPanel firstPanel;
   private static JFrame firstFrame;
   private final int RIGHT_INDENT = 500;
@@ -70,21 +71,17 @@ public class FirstMenu {
     firstPanel = new BgPanel();
     firstPanel.setLayout(new GridBagLayout());
 
-    firstPanel.add(newGameLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0,
-        GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
-        new Insets(230, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(replayLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0,
-        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(settingsLabel, new GridBagConstraints(0, 2, 1, 1, 0, 0,
-        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(botLabel, new GridBagConstraints(0, 3, 1, 1, 0, 0,
-        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(exitLabel, new GridBagConstraints(0, 4, 1, 1, 0, 0,
-        GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(newGameLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH,
+        GridBagConstraints.HORIZONTAL, new Insets(230, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(replayLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER,
+        GridBagConstraints.HORIZONTAL, new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(settingsLabel,
+        new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.CENTER,
+            GridBagConstraints.HORIZONTAL, new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(botLabel, new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.CENTER,
+        GridBagConstraints.HORIZONTAL, new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(exitLabel, new GridBagConstraints(0, 4, 1, 1, 0, 0, GridBagConstraints.CENTER,
+        GridBagConstraints.HORIZONTAL, new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
 
     firstFrame.add(firstPanel);
     firstFrame.setVisible(true);
@@ -273,6 +270,7 @@ public class FirstMenu {
       settingsFrame.setVisible(true);
       okButton.addActionListener(new ButtonListener());
     }
+
     class ButtonListener implements ActionListener {
       @Override
       public void actionPerformed(ActionEvent arg0) {

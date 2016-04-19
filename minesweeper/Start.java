@@ -2,7 +2,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -22,7 +21,9 @@ public class Start {
   private File boardFile = new File("Board.txt");
   private static boolean isBot;
   private static boolean isReplay;
-  private static Board bd;
+  // private static Board bd;
+  private static Server server;
+  private static Client client;
   private static JFrame frame;
   private int numOfBombs = 10;
   private int numOfRows = 10;
@@ -36,13 +37,7 @@ public class Start {
   Start(int numOf[], boolean isBot, boolean isReplay) throws InterruptedException, IOException {
     this.numOf = new int[3];
     this.numOf = numOf;
-    if(isReplay){
-      InputStream boardInputStream = new FileInputStream(boardFile);
-      numOfColumns = boardInputStream.read();
-      numOfRows = boardInputStream.read();
-      numOfBombs = boardInputStream.read();      
-      boardInputStream.close();
-    }
+    
     this.isBot = isBot;
     this.isReplay = isReplay;
     if (numOf[0] > MIN_SIZE) {
@@ -53,6 +48,13 @@ public class Start {
     }
     if (numOf[2] > MIN_SIZE) {
       numOfBombs = numOf[2];
+    }
+    if (isReplay) {
+      InputStream boardInputStream = new FileInputStream(boardFile);
+      numOfColumns = boardInputStream.read();
+      numOfRows = boardInputStream.read();
+      numOfBombs = boardInputStream.read();
+      boardInputStream.close();
     }
     frame = new JFrame("Miner");
     JMenuBar menu = new JMenuBar();
@@ -77,13 +79,14 @@ public class Start {
     frame.setVisible(true);
     frame.setResizable(false);
     frame.repaint();
-    bd = new Board(numOfColumns, numOfRows, numOfBombs, isBot, isReplay);
-    frame.add(bd);
+    server = new Server(numOfColumns, numOfRows, numOfBombs, isBot, isReplay);
+    client = new Client(server);
+    frame.add(client);
   }
 
   static class NewGameMenuItemListener implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
-      if(isReplay){
+      if (isReplay) {
         frame.dispose();
         try {
           new Start(numOf, false, false);
@@ -94,7 +97,7 @@ public class Start {
         }
       }
       try {
-        bd.ResetGame();
+        client.ResetGame();
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

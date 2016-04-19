@@ -1,34 +1,38 @@
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Class for bot.
+ * 
  * @author Vladimir
  *
  */
 public class Bot implements Runnable {
-  private Board bd;
+  private Server board;
   private Thread thread;
+  private int SLEEP_TIME = 3000;
 
-  Bot(Board botBoard) throws InterruptedException {
+  Bot(Server botBoard) throws InterruptedException {
     thread = new Thread(this);
-    bd = botBoard;
-    thread.start();
-  }
-
-  public void restart() {
+    board = botBoard;
     thread.start();
   }
 
   @Override
   public void run() {
     try {
-      bd.botGaming();
+      Random random = new Random();
+      int xPositionOfBotChoose = 0;
+      int yPositionOfBotChoose = 0;
+      while (!board.getField()[0][0].getIsAnyBanged()) {
+        xPositionOfBotChoose = Math.abs(random.nextInt() % board.getNumOfRows());
+        yPositionOfBotChoose = Math.abs(random.nextInt() % board.getNumOfColumns());
+        if (!(board.getField()[yPositionOfBotChoose][xPositionOfBotChoose].getIsOpen())) {
+          Thread.sleep(SLEEP_TIME);
+          board.actionAnalisys(xPositionOfBotChoose, yPositionOfBotChoose);
+        }
+      }
     } catch (InterruptedException | IOException e) {
-      e.printStackTrace();
-    }
-    try {
-      thread.join();
-    } catch (InterruptedException e) {
       e.printStackTrace();
     }
   }
