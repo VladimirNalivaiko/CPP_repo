@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_f50f5786",
+        "filename": "Minesweeper/Client.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1007640
+      },
+      "writtenOn": "2016-04-19T22:00:35Z",
+      "side": 1,
+      "message": "...",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 20
+      },
+      "revId": "8392249cedfefed16495c7079cf320fc87ef588c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b522efff",
+        "filename": "Minesweeper/Client.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1007640
+      },
+      "writtenOn": "2016-04-19T22:00:35Z",
+      "side": 1,
+      "message": "code style IF(){}",
+      "range": {
+        "startLine": 65,
+        "startChar": 6,
+        "endLine": 67,
+        "endChar": 15
+      },
+      "revId": "8392249cedfefed16495c7079cf320fc87ef588c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_95212bfe",
+        "filename": "Minesweeper/Client.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1007640
+      },
+      "writtenOn": "2016-04-19T22:00:35Z",
+      "side": 1,
+      "message": "CS",
+      "range": {
+        "startLine": 69,
+        "startChar": 6,
+        "endLine": 71,
+        "endChar": 15
+      },
+      "revId": "8392249cedfefed16495c7079cf320fc87ef588c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_557a83f2",
+        "filename": "Minesweeper/Client.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1007640
+      },
+      "writtenOn": "2016-04-19T22:00:35Z",
+      "side": 1,
+      "message": "i respect this)",
+      "range": {
+        "startLine": 77,
+        "startChar": 10,
+        "endLine": 77,
+        "endChar": 44
+      },
+      "revId": "8392249cedfefed16495c7079cf320fc87ef588c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b569cf27",
+        "filename": "Minesweeper/Client.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1007640
+      },
+      "writtenOn": "2016-04-19T22:00:35Z",
+      "side": 1,
+      "message": "what is it? empty functions",
+      "range": {
+        "startLine": 93,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "8392249cedfefed16495c7079cf320fc87ef588c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_55616338",
+        "filename": "Minesweeper/Client.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1007640
+      },
+      "writtenOn": "2016-04-19T22:00:35Z",
+      "side": 1,
+      "message": "empty block. use while();",
+      "range": {
+        "startLine": 129,
+        "startChar": 1,
+        "endLine": 132,
+        "endChar": 5
+      },
+      "revId": "8392249cedfefed16495c7079cf320fc87ef588c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_d5557350",
+        "filename": "minesweeper/FirstMenu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1007640
+      },
+      "writtenOn": "2016-04-19T22:00:35Z",
+      "side": 1,
+      "message": "Why u use empty methods?",
+      "range": {
+        "startLine": 95,
+        "startChar": 1,
+        "endLine": 166,
+        "endChar": 46
+      },
+      "revId": "8392249cedfefed16495c7079cf320fc87ef588c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
