@@ -22,8 +22,8 @@ public class Start {
   private static boolean isBot;
   private static boolean isReplay;
   // private static Board bd;
-  private static Server server;
-  private static Client client;
+  private Server server;
+  private Client client;
   private static JFrame frame;
   private int numOfBombs = 10;
   private int numOfRows = 10;
@@ -84,7 +84,7 @@ public class Start {
     frame.add(client);
   }
 
-  static class NewGameMenuItemListener implements ActionListener {
+   class NewGameMenuItemListener implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
       if (isReplay) {
         frame.dispose();

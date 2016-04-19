@@ -70,7 +70,7 @@ public class Server implements Runnable {
         bot = new Bot(this);
         inGame = true;
       }
-    }    
+    }
   }
 
   public static boolean isReplay() {
@@ -432,10 +432,7 @@ public class Server implements Runnable {
 
   @Override
   public void run() {
-
-    while (!serverThread.isInterrupted()) {
-
-    }
+    while (!serverThread.isInterrupted());
   }
 
 }
