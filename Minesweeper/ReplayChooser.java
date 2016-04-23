@@ -130,7 +130,6 @@ public class ReplayChooser {
     @Override
     public void mouseClicked(MouseEvent event) {
       sortArray();
-      System.out.println(table.columnAtPoint(event.getPoint()));
       ReplayCharacteristics.setSortVariant(table.columnAtPoint(event.getPoint()));
       replayCharacteristicsList.sort(ReplayCharacteristics::compareTo);
       updateContent();

@@ -107,7 +107,6 @@ public class Server implements Runnable {
   }
 
   void writeReplay() throws IOException {
-    System.out.println("PPPPP");
     boardFile = new File(newReplayName);
     OutputStream boardOutPutStream = new FileOutputStream(boardFile);
     for (int i = 0; i < boardReplayArrayList.size(); i++) {
