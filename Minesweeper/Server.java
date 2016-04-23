@@ -1,3 +1,8 @@
+package minesweeperPackage;
+
+import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,14 +12,19 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Server implements Runnable {
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
+public class Server implements Runnable {
+  private String newReplayName;
+  private String replayFileName = "./replay/";
+  private File replayFolder = new File("./replay/");
   private Bot bot;
   private static boolean isBot;
   private Replay replay;
   private static boolean isReplay;
-  private File boardFile = new File("Board.txt");
-  private File userFile = new File("Replay.txt");
+  private File boardFile;
   private ArrayList<Integer> boardReplayArrayList = new ArrayList<Integer>();
   private ArrayList<Integer> userArrayList = new ArrayList<Integer>();
   private ArrayList<Integer> bombArrayList = new ArrayList<Integer>();
@@ -26,18 +36,21 @@ public class Server implements Runnable {
   private int numOfColumns;
   private int numOfBombs;
   private boolean isStoped;
+  private JFrame replayFrame;
+  private JTextField fileNameTextField;
 
   private static boolean inGame;
 
   protected Cell[][] field;
 
-  Server(int ñolumns, int rows, int bombs, boolean isBot, boolean isReplay)
+  Server(int ñolumns, int rows, int bombs, boolean isBot, boolean isReplay, String fileName)
       throws InterruptedException, IOException {
     if (serverThread == null) {
       serverThread = new Thread(this);
-      serverThread.start();
     }
     if (isReplay) {
+      replayFileName += fileName;
+      boardFile = new File(replayFileName);
       InputStream boardInputStream = new FileInputStream(boardFile);
       numOfColumns = boardInputStream.read();
       numOfRows = boardInputStream.read();
@@ -54,7 +67,7 @@ public class Server implements Runnable {
       Init();
       inGame = true;
       this.isReplay = isReplay;
-      replay = new Replay(this);
+      replay = new Replay(this, replayFileName);
     } else {
       numOfColumns = ñolumns;
       numOfRows = rows;
@@ -70,6 +83,9 @@ public class Server implements Runnable {
         bot = new Bot(this);
         inGame = true;
       }
+    }
+    if (serverThread == null) {
+      serverThread.start();
     }
   }
 
@@ -87,22 +103,21 @@ public class Server implements Runnable {
 
   public boolean getThreadCondition() {
     return serverThread.isAlive();
+
   }
 
   void writeReplay() throws IOException {
+    System.out.println("PPPPP");
+    boardFile = new File(newReplayName);
     OutputStream boardOutPutStream = new FileOutputStream(boardFile);
     for (int i = 0; i < boardReplayArrayList.size(); i++) {
       boardOutPutStream.write(boardReplayArrayList.get(i).intValue());
     }
+    for (int i = 0; i < userArrayList.size(); i++) {
+      boardOutPutStream.write(userArrayList.get(i).intValue());
+    }
     boardOutPutStream.flush();
     boardOutPutStream.close();
-
-    OutputStream userOutPutStream = new FileOutputStream(userFile);
-    for (int i = 0; i < userArrayList.size(); i++) {
-      userOutPutStream.write(userArrayList.get(i).intValue());
-    }
-    userOutPutStream.flush();
-    userOutPutStream.close();
     userArrayList.clear();
     boardReplayArrayList.clear();
     bombArrayList.clear();
@@ -135,7 +150,8 @@ public class Server implements Runnable {
         xPositionOfPasteBomb = Math.abs(random.nextInt() % numOfColumns);
         yPositionOfPasteBomb = Math.abs(random.nextInt() % numOfRows);
         if (!(field[yPositionOfPasteBomb][xPositionOfPasteBomb].getIsBomb())
-            && !(field[yPositionOfPasteBomb][xPositionOfPasteBomb].getIsOpen())) {
+            && !(field[yPositionOfPasteBomb][xPositionOfPasteBomb].
+                getIsOpen())) {
           field[yPositionOfPasteBomb][xPositionOfPasteBomb].setIsBomb(true);
           numOfPastedBombs++;
           boardReplayArrayList.add(xPositionOfPasteBomb);
@@ -155,91 +171,83 @@ public class Server implements Runnable {
   public void findEmptyCells(int x, int y) {
     if (!field[y][x].getIsBomb()) {
       if (findNearBombs(x, y) != 0) {
-        field[y][x].setToRepaint(true);
-        field[y][x].setIsOpen(true);
+        workWithCell(y, x);
         return;
       }
       if (y != 0) {
         if (findNearBombs(x, y - 1) == 0 && !field[y - 1][x].getIsOpen()) {
-          field[y - 1][x].setIsOpen(true);
-          field[y - 1][x].setToRepaint(true);
+          workWithCell(y - 1, x);
           findEmptyCells(x, y - 1);
         } else {
-          field[y - 1][x].setIsOpen(true);
-          field[y - 1][x].setToRepaint(true);
+          workWithCell(y - 1, x );
         }
       }
       if (x != 0) {
         if (findNearBombs(x - 1, y) == 0 && !field[y][x - 1].getIsOpen()) {
-          field[y][x - 1].setToRepaint(true);
-          field[y][x - 1].setIsOpen(true);
+          workWithCell(y , x - 1);
           findEmptyCells(x - 1, y);
         } else {
-          field[y][x - 1].setIsOpen(true);
-          field[y][x - 1].setToRepaint(true);
+          workWithCell(y, x - 1);
         }
       }
       if (y != numOfRows - 1) {
         if (findNearBombs(x, y + 1) == 0 && !field[y + 1][x].getIsOpen()) {
-          field[y + 1][x].setIsOpen(true);
-          field[y + 1][x].setToRepaint(true);
+          workWithCell(y + 1, x);
           findEmptyCells(x, y + 1);
         } else {
-          field[y + 1][x].setIsOpen(true);
-          field[y + 1][x].setToRepaint(true);
+          workWithCell(y + 1, x);
         }
       }
       if (x != numOfColumns - 1) {
         if (findNearBombs(x + 1, y) == 0 && !field[y][x + 1].getIsOpen()) {
-          field[y][x + 1].setIsOpen(true);
-          field[y][x + 1].setToRepaint(true);
+          workWithCell(y, x + 1);
           findEmptyCells(x + 1, y);
         } else {
-          field[y][x + 1].setIsOpen(true);
-          field[y][x + 1].setToRepaint(true);
+          workWithCell(y, x + 1);
         }
       }
       if (y != 0 && x != 0) {
-        if (findNearBombs(x - 1, y - 1) == 0 && !field[y - 1][x - 1].getIsOpen()) {
-          field[y - 1][x - 1].setIsOpen(true);
-          field[y - 1][x - 1].setToRepaint(true);
+        if (findNearBombs(x - 1, y - 1) == 0 &&
+            !field[y - 1][x - 1].getIsOpen()) {
+          workWithCell(y - 1, x - 1);
           findEmptyCells(x - 1, y - 1);
         } else {
-          field[y - 1][x - 1].setIsOpen(true);
-          field[y - 1][x - 1].setToRepaint(true);
+          workWithCell(y - 1, x - 1);
         }
       }
       if (y != numOfRows - 1 && x != 0) {
-        if (findNearBombs(x - 1, y + 1) == 0 && !field[y + 1][x - 1].getIsOpen()) {
-          field[y + 1][x - 1].setIsOpen(true);
-          field[y + 1][x - 1].setToRepaint(true);
+        if (findNearBombs(x - 1, y + 1) == 0 &&
+            !field[y + 1][x - 1].getIsOpen()) {
+          workWithCell(y + 1, x - 1);
           findEmptyCells(x - 1, y + 1);
         } else {
-          field[y + 1][x - 1].setIsOpen(true);
-          field[y + 1][x - 1].setToRepaint(true);
+          workWithCell(y + 1, x - 1);
         }
       }
       if (y != numOfRows - 1 && x != numOfColumns - 1) {
-        if (findNearBombs(x + 1, y + 1) == 0 && !field[y + 1][x + 1].getIsOpen()) {
-          field[y + 1][x + 1].setIsOpen(true);
-          field[y + 1][x + 1].setToRepaint(true);
+        if (findNearBombs(x + 1, y + 1) == 0 &&
+            !field[y + 1][x + 1].getIsOpen()) {
+          workWithCell(y + 1, x + 1);
           findEmptyCells(x + 1, y + 1);
         } else {
-          field[y + 1][x + 1].setIsOpen(true);
-          field[y + 1][x + 1].setToRepaint(true);
+          workWithCell(y + 1, x + 1);
         }
       }
       if (y != 0 && x != numOfColumns - 1) {
-        if (findNearBombs(x + 1, y - 1) == 0 && !field[y - 1][x + 1].getIsOpen()) {
-          field[y - 1][x + 1].setIsOpen(true);
-          field[y - 1][x + 1].setToRepaint(true);
+        if (findNearBombs(x + 1, y - 1) == 0 &&
+            !field[y - 1][x + 1].getIsOpen()) {
+          workWithCell(y - 1, x + 1);
           findEmptyCells(x + 1, y - 1);
         } else {
-          field[y - 1][x + 1].setIsOpen(true);
-          field[y - 1][x + 1].setToRepaint(true);
+          workWithCell(y - 1, x + 1);
         }
       }
     }
+  }
+  
+  public void workWithCell(int y, int x){
+    field[y][x].setIsOpen(true);
+    field[y][x].setToRepaint(true);
   }
 
   /**
@@ -313,9 +321,7 @@ public class Server implements Runnable {
       newGame();
 
       if (!isReplay) {
-        userArrayList.add(pressedCol);
-        userArrayList.add(pressedRow);
-        userArrayList.add(0);
+        addToUserList(pressedCol, pressedRow, 0);
       }
       client.repaint();
       findEmptyCells(pressedCol, pressedRow);
@@ -326,23 +332,19 @@ public class Server implements Runnable {
       pressedCell.setIsOpen(true);
       pressedCell.setIsAnyBanged(true);
       if (!isReplay) {
-        userArrayList.add(pressedCol);
-        userArrayList.add(pressedRow);
-        userArrayList.add(0);
+        addToUserList(pressedCol, pressedRow, 0);
       }
       if (!isReplay) {
-        writeReplay();
+        saveReplay();
       }
+      client.finish();
       isReplay = false;
       isBot = false;
-      client.finish();
       return;
     }
     if (!pressedCell.getIsOpen()) {
       if (!isReplay) {
-        userArrayList.add(pressedCol);
-        userArrayList.add(pressedRow);
-        userArrayList.add(0);
+        addToUserList(pressedCol, pressedRow, 0);
       }
       findEmptyCells(pressedCol, pressedRow);
       pressedCell.setIsOpen(true);
@@ -350,34 +352,40 @@ public class Server implements Runnable {
     }
   }
 
+  public void addToUserList(int pressedCol, int pressedRow, int button) {
+    userArrayList.add(pressedCol);
+    userArrayList.add(pressedRow);
+    userArrayList.add(0);
+  }
+
   void rightMouseButtonListener(int pressedCol, int pressedRow)
       throws InterruptedException, IOException {
     Cell pressedCell = field[pressedRow][pressedCol];
     if (!isReplay) {
-      userArrayList.add(pressedCol);
-      userArrayList.add(pressedRow);
-      userArrayList.add(1);
+      addToUserList(pressedCol, pressedRow, 1);
     }
     if (!pressedCell.getIsSooposedToBeBomb()) {
-      if (pressedCell.getIsBomb())
+      if (pressedCell.getIsBomb()) {
         numOfUncoveredBombs--;
-      else
+      } else {
         numOfWrongFlags++;
+      }
       pressedCell.setIsSooposedToBeBomb(true);
     } else {
       pressedCell.setIsSooposedToBeBomb(false);
-      if (pressedCell.getIsBomb())
+      if (pressedCell.getIsBomb()) {
         numOfUncoveredBombs++;
-      else
+      } else {
         numOfWrongFlags--;
+      }
     }
     if (numOfUncoveredBombs == 0 && numOfWrongFlags == 0) {
       if (!isReplay) {
-        writeReplay();
+        saveReplay();
       }
       client.finish();
-      return;
     }
+    client.repaint();
     return;
   }
 
@@ -432,7 +440,58 @@ public class Server implements Runnable {
 
   @Override
   public void run() {
-    while (!serverThread.isInterrupted());
+    while (!field[0][0].getIsAnyBanged() && numOfUncoveredBombs != 0);
   }
 
+  public String saveReplay() {
+    newReplayName = new String();
+    newReplayName = replayFileName;
+    replayFrame = new JFrame("Save");
+    replayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    JLabel gameMessage = new JLabel();
+    String gameMessageString = new String();
+    if (getNumOfUncoveredBombs() != 0) {
+      gameMessageString = "You lose";
+    } else {
+      gameMessageString = "You win";
+    }
+    gameMessageString += ", enter replay's name : ";
+    gameMessage.setText(gameMessageString);
+    fileNameTextField = new JTextField(20);
+    fileNameTextField.addKeyListener(new fileNameKeyListener());
+
+    replayFrame.setLayout(new GridLayout(2, 0));
+    replayFrame.add(gameMessage);
+    replayFrame.add(fileNameTextField);
+    replayFrame.pack();
+    replayFrame.setLocationRelativeTo(null);
+    replayFrame.setVisible(true);
+    return newReplayName;
+  }
+
+  public class fileNameKeyListener implements KeyListener {
+    @Override
+    public void keyPressed(KeyEvent event) {
+      if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+        newReplayName += fileNameTextField.getText();
+        replayFrame.dispose();
+        try {
+          writeReplay();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+  }
 }

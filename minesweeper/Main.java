@@ -1,3 +1,4 @@
+package minesweeperPackage;
 /**
  * Main.
  * 

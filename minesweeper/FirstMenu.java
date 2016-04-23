@@ -1,3 +1,4 @@
+package minesweeperPackage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -146,7 +147,6 @@ public class FirstMenu {
       } catch (InterruptedException | IOException e1) {
         e1.printStackTrace();
       }
-      firstFrame.dispose();
     }
 
     @Override
@@ -174,8 +174,6 @@ public class FirstMenu {
       } catch (InterruptedException | IOException e1) {
         e1.printStackTrace();
       }
-
-      firstFrame.dispose();
     }
 
     @Override
@@ -198,11 +196,11 @@ public class FirstMenu {
     @Override
     public void mouseClicked(MouseEvent e) {
       try {
+        firstFrame.dispose();
         new Start(numOf, false, false);
       } catch (InterruptedException | IOException e1) {
         e1.printStackTrace();
       }
-      firstFrame.dispose();
     }
 
     @Override

@@ -1,3 +1,4 @@
+package minesweeperPackage;
 import java.io.IOException;
 import java.util.Random;
 
@@ -10,7 +11,7 @@ import java.util.Random;
 public class Bot implements Runnable {
   private Server board;
   private Thread thread;
-  private int SLEEP_TIME = 3000;
+  private int SLEEP_TIME = 800;
 
   Bot(Server botBoard) throws InterruptedException {
     thread = new Thread(this);
@@ -25,9 +26,12 @@ public class Bot implements Runnable {
       int xPositionOfBotChoose = 0;
       int yPositionOfBotChoose = 0;
       while (!board.getField()[0][0].getIsAnyBanged()) {
-        xPositionOfBotChoose = Math.abs(random.nextInt() % board.getNumOfRows());
-        yPositionOfBotChoose = Math.abs(random.nextInt() % board.getNumOfColumns());
-        if (!(board.getField()[yPositionOfBotChoose][xPositionOfBotChoose].getIsOpen())) {
+        xPositionOfBotChoose = Math.abs(random.nextInt() %
+            board.getNumOfRows());
+        yPositionOfBotChoose = Math.abs(random.nextInt() %
+            board.getNumOfColumns());
+        if (!(board.getField()[yPositionOfBotChoose][xPositionOfBotChoose].
+            getIsOpen())) {
           Thread.sleep(SLEEP_TIME);
           board.actionAnalisys(xPositionOfBotChoose, yPositionOfBotChoose);
         }

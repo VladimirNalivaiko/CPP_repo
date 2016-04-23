@@ -1,3 +1,4 @@
+package minesweeperPackage;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -14,19 +15,20 @@ public class Client extends JPanel implements Runnable {
 
   private Thread clientThread;
   private static boolean isBot;
-  private Replay replay;
   private final int CELL_SIZE = 15;
-  static private Image[] img = new Image[13];
+  private Image[] img = new Image[13];
   private Server board;
 
   Client(Server board) {
-
+    if(clientThread == null)
+      imageLoad();
     this.board = board;
     board.setClient(this);
     clientThread = new Thread(this);
     clientThread.start();
-    imageLoad();
-    this.addMouseListener(new CellListener());
+    
+    if (!board.isReplay() && !isBot)
+      this.addMouseListener(new CellListener());
     repaint();
   }
 
@@ -50,10 +52,6 @@ public class Client extends JPanel implements Runnable {
     this.repaint();
     if (board.isReplay()) {
       JOptionPane.showMessageDialog(new JFrame(), "     Replay has stoped");
-    } else if (board.getNumOfUncoveredBombs() != 0) {
-      JOptionPane.showMessageDialog(new JFrame(), "                You lose");
-    } else {
-      JOptionPane.showMessageDialog(new JFrame(), "                You win");
     }
     board.setReplay(false);
     isBot = false;
@@ -78,16 +76,15 @@ public class Client extends JPanel implements Runnable {
         try {
           board.rightMouseButtonListener(pressedCol, pressedRow);
         } catch (InterruptedException | IOException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
+        repaint();
         return;
       }
 
       try {
         board.actionAnalisys(pressedCol, pressedRow);
       } catch (InterruptedException | IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
       repaint();
@@ -132,6 +129,8 @@ public class Client extends JPanel implements Runnable {
 
   @Override
   public void run() {
-    while (board.getThreadCondition());
+    while (!board.getField()[0][0].getIsAnyBanged() && 
+        board.getNumOfUncoveredBombs() != 0){
+    }
   }
 }

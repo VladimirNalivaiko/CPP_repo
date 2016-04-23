@@ -1,3 +1,4 @@
+package minesweeperPackage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -17,18 +18,18 @@ import javax.swing.JMenuItem;
  * 
  */
 public class Start {
+  private String replayPath = "./replay/";
+  private String replayFileName;
+  private ReplayChooser replayChooser;
   private static int numOf[];
-  private File boardFile = new File("Board.txt");
   private static boolean isBot;
   private static boolean isReplay;
-  // private static Board bd;
   private Server server;
   private Client client;
   private static JFrame frame;
   private int numOfBombs = 10;
   private int numOfRows = 10;
   private int numOfColumns = 10;
-  private static File replayFile;
   private final int CELL_SIZE = 15;
   private final int RIGHT_INDENT = 6;
   private final int LEFT_INDENT = 52;
@@ -37,9 +38,27 @@ public class Start {
   Start(int numOf[], boolean isBot, boolean isReplay) throws InterruptedException, IOException {
     this.numOf = new int[3];
     this.numOf = numOf;
-    
     this.isBot = isBot;
     this.isReplay = isReplay;
+    if (!isReplay) {     
+      createBoard();
+    } else {
+      replayChooser = new ReplayChooser(this);
+    }
+  }
+
+  public void setReplayFileName(String replayFileName) {
+    this.replayFileName = replayFileName;
+  }
+
+  public void createBoard() throws InterruptedException, IOException {
+    if (isReplay) {
+      InputStream boardInputStream = new FileInputStream(new File(replayPath + replayFileName));
+      numOfColumns = boardInputStream.read();
+      numOfRows = boardInputStream.read();
+      numOfBombs = boardInputStream.read();
+      boardInputStream.close();
+    }
     if (numOf[0] > MIN_SIZE) {
       numOfColumns = numOf[0];
     }
@@ -49,13 +68,6 @@ public class Start {
     if (numOf[2] > MIN_SIZE) {
       numOfBombs = numOf[2];
     }
-    if (isReplay) {
-      InputStream boardInputStream = new FileInputStream(boardFile);
-      numOfColumns = boardInputStream.read();
-      numOfRows = boardInputStream.read();
-      numOfBombs = boardInputStream.read();
-      boardInputStream.close();
-    }
     frame = new JFrame("Miner");
     JMenuBar menu = new JMenuBar();
     JMenu gameMenu = new JMenu("Game");
@@ -64,7 +76,8 @@ public class Start {
     JMenuItem exitMenuItem = new JMenuItem("Exit");
 
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(numOfColumns * CELL_SIZE + RIGHT_INDENT, numOfRows * CELL_SIZE + LEFT_INDENT);
+    frame.setSize(numOfColumns * CELL_SIZE + RIGHT_INDENT, 
+        numOfRows * CELL_SIZE + LEFT_INDENT);
     frame.setLocationRelativeTo(null);
 
     newGameMenuItem.addActionListener(new NewGameMenuItemListener());
@@ -79,12 +92,14 @@ public class Start {
     frame.setVisible(true);
     frame.setResizable(false);
     frame.repaint();
-    server = new Server(numOfColumns, numOfRows, numOfBombs, isBot, isReplay);
+
+    server = new Server(numOfColumns, numOfRows, numOfBombs,
+        isBot, isReplay, replayFileName);
     client = new Client(server);
     frame.add(client);
   }
 
-   class NewGameMenuItemListener implements ActionListener {
+  class NewGameMenuItemListener implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
       if (isReplay) {
         frame.dispose();
@@ -117,4 +132,5 @@ public class Start {
       System.exit(0);
     }
   }
+
 }
