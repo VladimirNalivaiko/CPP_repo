@@ -35,7 +35,8 @@ public class Start {
   private final int LEFT_INDENT = 52;
   private final int MIN_SIZE = 10;
 
-  Start(int numOf[], boolean isBot, boolean isReplay) throws InterruptedException, IOException {
+  Start(int numOf[], boolean isBot, boolean isReplay) throws
+  InterruptedException, IOException {
     this.numOf = new int[3];
     this.numOf = numOf;
     this.isBot = isBot;
@@ -53,7 +54,8 @@ public class Start {
 
   public void createBoard() throws InterruptedException, IOException {
     if (isReplay) {
-      InputStream boardInputStream = new FileInputStream(new File(replayPath + replayFileName));
+      InputStream boardInputStream = new FileInputStream(new File(replayPath
+          + replayFileName));
       numOfColumns = boardInputStream.read();
       numOfRows = boardInputStream.read();
       numOfBombs = boardInputStream.read();

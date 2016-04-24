@@ -63,12 +63,14 @@ public class Client extends JPanel implements Runnable {
     public void mouseClicked(MouseEvent event) {
       int pressedCol = event.getX() / CELL_SIZE;
       int pressedRow = event.getY() / CELL_SIZE;
-      if ((pressedCol >= board.getNumOfColumns()) || (pressedRow >= board.getNumOfRows())) {
+      if ((pressedCol >= board.getNumOfColumns()) || (pressedRow >= 
+          board.getNumOfRows())) {
         return;
       }
       Cell pressedCell = (board.getField())[pressedRow][pressedCol];
       if (pressedCell.getIsAnyBanged()
-          || board.getNumOfUncoveredBombs() == 0 && board.getNumOfWrongFlags() == 0) {
+          || board.getNumOfUncoveredBombs() == 0 && board.getNumOfWrongFlags()
+          == 0) {
         return;
       }
 

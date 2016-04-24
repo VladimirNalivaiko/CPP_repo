@@ -1,4 +1,5 @@
 package minesweeperPackage;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -22,6 +23,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import minesweeperPackage.ReplayMenu.BackToMenuLabelListener;
+import minesweeperPackage.ReplayMenu.ReplayTabelLabelListener;
+import minesweeperPackage.ReplayMenu.StatisticsLabelListener;
+
 /**
  * First menu of the game. Contains New Game, Settings and Exit buttons.
  * 
@@ -35,14 +40,15 @@ public class FirstMenu {
   private static JLabel settingsLabel;
   private static JLabel exitLabel;
 
-  private static BgPanel firstPanel;
-  private static JFrame firstFrame;
+  protected static BgPanel firstPanel;
+  protected static JFrame firstFrame;
   private final int RIGHT_INDENT = 500;
   private final int LEFT_INDENT = 25;
   private final int MIN_NUMBER = 10;
   private final int MAX_NUMBER = 100;
   private final int FRAME_WIDTH = 800;
   private final int FRAME_HIGHT = 600;
+  Font FONT = new Font("Modern No. 20", Font.PLAIN, 30);
   private final Color LABELS_COLOR = new Color(130, 130, 130);
   private final Color MOUSE_ENTERED_COLOR = new Color(230, 190, 130);
   int[] numOf = new int[3];
@@ -56,12 +62,11 @@ public class FirstMenu {
     exitLabel = new JLabel("Exit");
     firstFrame.setSize(FRAME_WIDTH, FRAME_HIGHT);
     firstFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    Font font = new Font("Modern No. 20", Font.PLAIN, 30);
-    newGameLabel.setFont(font);
-    replayLabel.setFont(font);
-    settingsLabel.setFont(font);
-    exitLabel.setFont(font);
-    botLabel.setFont(font);
+    newGameLabel.setFont(FONT);
+    replayLabel.setFont(FONT);
+    settingsLabel.setFont(FONT);
+    exitLabel.setFont(FONT);
+    botLabel.setFont(FONT);
     newGameLabel.setForeground(LABELS_COLOR);
     replayLabel.setForeground(newGameLabel.getForeground());
     settingsLabel.setForeground(newGameLabel.getForeground());
@@ -72,17 +77,26 @@ public class FirstMenu {
     firstPanel = new BgPanel();
     firstPanel.setLayout(new GridBagLayout());
 
-    firstPanel.add(newGameLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH,
-        GridBagConstraints.HORIZONTAL, new Insets(230, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(replayLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER,
-        GridBagConstraints.HORIZONTAL, new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(newGameLabel, 
+        new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH,
+        GridBagConstraints.HORIZONTAL, 
+        new Insets(230, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(replayLabel, 
+        new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER,
+        GridBagConstraints.HORIZONTAL, 
+        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
     firstPanel.add(settingsLabel,
         new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.CENTER,
-            GridBagConstraints.HORIZONTAL, new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(botLabel, new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.CENTER,
-        GridBagConstraints.HORIZONTAL, new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
-    firstPanel.add(exitLabel, new GridBagConstraints(0, 4, 1, 1, 0, 0, GridBagConstraints.CENTER,
-        GridBagConstraints.HORIZONTAL, new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+            GridBagConstraints.HORIZONTAL,
+            new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(botLabel, 
+        new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.CENTER,
+        GridBagConstraints.HORIZONTAL, 
+        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
+    firstPanel.add(exitLabel, 
+        new GridBagConstraints(0, 4, 1, 1, 0, 0, GridBagConstraints.CENTER,
+        GridBagConstraints.HORIZONTAL, 
+        new Insets(0, 0, LEFT_INDENT, RIGHT_INDENT), 0, 0));
 
     firstFrame.add(firstPanel);
     firstFrame.setVisible(true);
@@ -91,6 +105,22 @@ public class FirstMenu {
     botLabel.addMouseListener(new BotLabelListener());
     exitLabel.addMouseListener(new ExitLabelListener());
     newGameLabel.addMouseListener(new NewGameLabelListener());
+  }
+  
+  public void showReplayMenu(){
+    ReplayMenu replayMenu = new ReplayMenu(firstPanel, this, numOf);
+  }
+  
+  public void setVisibleLabels(boolean visible){
+    newGameLabel.setVisible(visible);
+    replayLabel.setVisible(visible);
+    settingsLabel.setVisible(visible);
+    botLabel.setVisible(visible);
+    exitLabel.setVisible(visible);
+  }
+
+  public JFrame getFrame() {
+    return firstFrame;
   }
 
   public class ExitLabelListener implements MouseListener {
@@ -141,12 +171,8 @@ public class FirstMenu {
   public class ReplayLabelListener implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
-      try {
-        firstFrame.dispose();
-        new Start(numOf, false, true);
-      } catch (InterruptedException | IOException e1) {
-        e1.printStackTrace();
-      }
+      setVisibleLabels(false);
+      showReplayMenu();
     }
 
     @Override

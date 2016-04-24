@@ -43,7 +43,8 @@ public class Server implements Runnable {
 
   protected Cell[][] field;
 
-  Server(int ñolumns, int rows, int bombs, boolean isBot, boolean isReplay, String fileName)
+  Server(int colomns, int rows, int bombs, boolean isBot,
+      boolean isReplay, String fileName)
       throws InterruptedException, IOException {
     if (serverThread == null) {
       serverThread = new Thread(this);
@@ -69,12 +70,12 @@ public class Server implements Runnable {
       this.isReplay = isReplay;
       replay = new Replay(this, replayFileName);
     } else {
-      numOfColumns = ñolumns;
+      numOfColumns = colomns;
       numOfRows = rows;
       numOfBombs = bombs;
       numOfUncoveredBombs = numOfBombs;
       Init();
-      boardReplayArrayList.add(ñolumns);
+      boardReplayArrayList.add(colomns);
       boardReplayArrayList.add(rows);
       boardReplayArrayList.add(bombs);
       isStoped = false;
@@ -107,6 +108,7 @@ public class Server implements Runnable {
   }
 
   void writeReplay() throws IOException {
+    System.out.println("PPPPP");
     boardFile = new File(newReplayName);
     OutputStream boardOutPutStream = new FileOutputStream(boardFile);
     for (int i = 0; i < boardReplayArrayList.size(); i++) {

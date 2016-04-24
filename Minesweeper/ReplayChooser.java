@@ -1,6 +1,5 @@
 package minesweeperPackage;
 
-import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -11,15 +10,15 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class ReplayChooser {
+public class ReplayChooser { 
   private final String[] HEADERS =
-      {"Replay's Name", "Num Of Columns", "Num Of Rows", "Num Of Bombs", "Num Of Clicks"};
+      {"Replay's Name", "Num Of Columns", "Num Of Rows",
+          "Num Of Bombs", "Num Of  Left Clicks", "Num Of Right Clicks"};
   private File REPLAY_FOLDER = new File("./replay/");
-  private final int NUM_OF_COLUMNS = 5;
+  private final int NUM_OF_COLUMNS = 6;
   private final int CELL_HIEGHT = 16;
-  private final int FRAME_WIDTH = 600;
+  private final int FRAME_WIDTH = 850;
   private final int FRAME_HIGHT = 550;
-  private final int SEQUENCE_OF_ITERETIONS = 100;
   private Object[][] replayContent;
   private int numOfReplay;
   private ArrayList<ReplayCharacteristics> replayCharacteristicsList;
@@ -48,28 +47,29 @@ public class ReplayChooser {
     long sortStartTime = 0;
     long sortEndTime = 0;
     long sortTraceTime = 0;
-    ScalaFunctions scalaSort = new ScalaFunctions();
+    ScalaFunctions scalaObject = new ScalaFunctions();
     Sort javaSort = new Sort();
     int[] array = new int[replayCharacteristicsList.size()];
     for (int i = 0; i < replayCharacteristicsList.size(); i++) {
-      array[i] = replayCharacteristicsList.get(i).getSequenceOfClicks();
+      array[i] = replayCharacteristicsList.get(i).getSequenceOfRightClicks();
     }
     sortEndTime = System.nanoTime();
 
-    for (int i = 0; i < SEQUENCE_OF_ITERETIONS; i++) {
-      scalaSort.sort(array);
-    }
+    scalaObject.sort(array);
     sortEndTime = System.nanoTime();
     sortTraceTime = sortEndTime - sortStartTime;
     System.out.println("Time of sorting in Scala: " + sortTraceTime);
 
     sortStartTime = System.nanoTime();
-    for (int i = 0; i < SEQUENCE_OF_ITERETIONS; i++) {
-      javaSort.quickSort(array, 0, array.length - 1);
-    }
+    javaSort.quickSort(array, 0, array.length - 1);
     sortEndTime = System.nanoTime();
     sortTraceTime = sortEndTime - sortStartTime;
     System.out.println("Time of sorting in Java: " + sortTraceTime);
+    int[] clickArray =  replayCharacteristicsList.get(0).getClickList();
+    System.out.println("Left Clicks : " + 
+        scalaObject.countLeftButtonClicked(clickArray));
+    System.out.println("Left Clicks : " + 
+        scalaObject.countRightButtonClicked(clickArray));
   }
 
 
@@ -77,7 +77,8 @@ public class ReplayChooser {
     replayFolderFiles = REPLAY_FOLDER.listFiles();
     for (int i = 0; i < replayFolderFiles.length; i++) {
       numOfReplay = i + 1;
-      replayCharacteristicsList.add(new ReplayCharacteristics(replayFolderFiles[i].getName()));
+      replayCharacteristicsList.add(new ReplayCharacteristics(
+          replayFolderFiles[i].getName()));
     }
   }
 
@@ -87,12 +88,20 @@ public class ReplayChooser {
 
   public void updateContent() {
     for (int i = 0; i < numOfReplay; i++) {
-      replayContent[i][0] = ((replayCharacteristicsList.get(i).getReplayFileName()));
-      replayContent[i][1] = (Integer.toString(replayCharacteristicsList.get(i).getNumOfColumns()));
-      replayContent[i][2] = (Integer.toString(replayCharacteristicsList.get(i).getNumOfRows()));
-      replayContent[i][3] = (Integer.toString(replayCharacteristicsList.get(i).getNumOfBombs()));
+      replayContent[i][0] = ((replayCharacteristicsList.get(i).
+          getReplayFileName()));
+      replayContent[i][1] = (Integer.toString(replayCharacteristicsList.
+          get(i).getNumOfColumns()));
+      replayContent[i][2] = (Integer.toString(replayCharacteristicsList.
+          get(i).getNumOfRows()));
+      replayContent[i][3] = (Integer.toString(replayCharacteristicsList.
+          get(i).getNumOfBombs()));
       replayContent[i][4] =
-          (Integer.toString(replayCharacteristicsList.get(i).getSequenceOfClicks()));
+          (Integer.toString(replayCharacteristicsList.get(i).
+              getSequenceOfLeftClicks()));
+      replayContent[i][5] =
+          (Integer.toString(replayCharacteristicsList.get(i).
+              getSequenceOfRightClicks()));
     }
   }
 
@@ -100,13 +109,20 @@ public class ReplayChooser {
     for (int i = 0; i < numOfReplay; i++) {
       replayContent[i][0] = new String((replayFolderFiles[i].getName()));
       replayContent[i][1] =
-          new String(Integer.toString(replayCharacteristicsList.get(i).getNumOfColumns()));
+          new String(Integer.toString(replayCharacteristicsList.get(i)
+              .getNumOfColumns()));
       replayContent[i][2] =
-          new String(Integer.toString(replayCharacteristicsList.get(i).getNumOfRows()));
+          new String(Integer.toString(replayCharacteristicsList.get(i)
+              .getNumOfRows()));
       replayContent[i][3] =
-          new String(Integer.toString(replayCharacteristicsList.get(i).getNumOfBombs()));
+          new String(Integer.toString(replayCharacteristicsList.get(i)
+              .getNumOfBombs()));
       replayContent[i][4] =
-          new String(Integer.toString(replayCharacteristicsList.get(i).getSequenceOfClicks()));
+          new String(Integer.toString(replayCharacteristicsList.get(i)
+              .getSequenceOfLeftClicks()));
+      replayContent[i][5] =
+          new String(Integer.toString(replayCharacteristicsList.get(i)
+              .getSequenceOfRightClicks()));
     }
   }
 
@@ -116,7 +132,6 @@ public class ReplayChooser {
 
     table = new JTable(replayContent, HEADERS);
     table.addMouseListener(new ReplayTableListener());
-    table.setPreferredScrollableViewportSize(new Dimension(250, 100));
     table.getTableHeader().addMouseListener(new HeaderTableListener());
     table.setCellSelectionEnabled(true);
     table.setEnabled(false);
@@ -130,7 +145,9 @@ public class ReplayChooser {
     @Override
     public void mouseClicked(MouseEvent event) {
       sortArray();
-      ReplayCharacteristics.setSortVariant(table.columnAtPoint(event.getPoint()));
+      ReplayCharacteristics.setSortVariant(table.
+          columnAtPoint(event.getPoint()));
+      System.out.println(table.columnAtPoint(event.getPoint()));
       replayCharacteristicsList.sort(ReplayCharacteristics::compareTo);
       updateContent();
       table.updateUI();
@@ -164,7 +181,8 @@ public class ReplayChooser {
     public void mouseClicked(MouseEvent event) {
 
       replayFrame.dispose();
-      start.setReplayFileName(replayFolderFiles[event.getY() / CELL_HIEGHT].getName());
+      start.setReplayFileName(( replayCharacteristicsList.
+          get(event.getY() / CELL_HIEGHT).getReplayFileName() ));
       try {
         start.createBoard();
       } catch (InterruptedException | IOException e) {

@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+
 public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> {
+  private static ArrayList<Integer> clickList = new ArrayList<>();
   private String PATH_TO_REPLAY = "./replay/";
   private String replayFileName;
   private File replayFile;
@@ -14,9 +16,12 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
   public int sequenceOfColumns;
   public int sequenceOfBombs;
   public int sequenceOfClicks;
+  public int sequenceOfRightClicks;
+  public int sequenceOfLeftClicks;
   private static int sortVariant;
 
   ReplayCharacteristics(String fileName) throws IOException {
+    
     replayFileName = PATH_TO_REPLAY + fileName;
     readReplayCharacteristics();
   }
@@ -39,10 +44,34 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
     while (!(boardInputStream.available() == 0)) {
       buf = boardInputStream.read();
       clicks++;
+      if (clicks % 3 == 0) {
+        clickList.add(buf);
+        if (buf == 0) {
+          sequenceOfLeftClicks++;
+        } else if (buf == 1) {
+          sequenceOfRightClicks++;
+        }
+      }
     }
     boardInputStream.close();
     sequenceOfClicks = clicks / 3;
     return this;
+  }
+
+  public static int[] getClickList() {
+    int[] array = new int[clickList.size()];
+    for(int i = 0; i < clickList.size(); i++){
+      array[i] = clickList.get(i);
+    }
+    return array;
+  }
+
+  public int getSequenceOfRightClicks() {
+    return sequenceOfRightClicks;
+  }
+
+  public int getSequenceOfLeftClicks() {
+    return sequenceOfLeftClicks;
   }
 
   public int getNumOfRows() {
@@ -86,7 +115,7 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
         break;
       }
       case 1: {
-        
+
         resultVariant = Integer.compare(sequenceOfColumns, 
             replay.sequenceOfColumns);
         break;
@@ -102,8 +131,13 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
         break;
       }
       case 4: {
-        resultVariant = Integer.compare(sequenceOfClicks, 
-            replay.sequenceOfClicks);
+        resultVariant = Integer.compare(sequenceOfLeftClicks, 
+            replay.sequenceOfLeftClicks);
+        break;
+      }
+      case 5: {
+        resultVariant = Integer.compare(sequenceOfRightClicks, 
+            replay.sequenceOfRightClicks);
         break;
       }
     }
@@ -120,5 +154,5 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
 
   public String getReplayFileName() {
     return replayFile.getName();
-  } 
+  }
 }
