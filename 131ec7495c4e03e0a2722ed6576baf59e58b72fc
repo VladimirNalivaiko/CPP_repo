@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_0730439d",
+        "filename": "Minesweeper/ReplaysStatistic.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-24T16:12:36Z",
+      "side": 1,
+      "message": "why not final?",
+      "range": {
+        "startLine": 20,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 11
+      },
+      "revId": "131ec7495c4e03e0a2722ed6576baf59e58b72fc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_c7293b39",
+        "filename": "Minesweeper/Server.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-24T16:12:36Z",
+      "side": 1,
+      "message": "???)",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 32
+      },
+      "revId": "131ec7495c4e03e0a2722ed6576baf59e58b72fc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_e7dd5f43",
+        "filename": "minesweeper/FirstMenu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-04-24T16:12:36Z",
+      "side": 1,
+      "message": "why not final?",
+      "range": {
+        "startLine": 51,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 11
+      },
+      "revId": "131ec7495c4e03e0a2722ed6576baf59e58b72fc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
