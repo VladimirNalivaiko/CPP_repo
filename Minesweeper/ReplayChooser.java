@@ -68,7 +68,7 @@ public class ReplayChooser {
     int[] clickArray =  replayCharacteristicsList.get(0).getClickList();
     System.out.println("Left Clicks : " + 
         scalaObject.countLeftButtonClicked(clickArray));
-    System.out.println("Left Clicks : " + 
+    System.out.println("Right Clicks : " + 
         scalaObject.countRightButtonClicked(clickArray));
   }
 

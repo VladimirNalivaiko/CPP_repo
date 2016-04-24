@@ -11,13 +11,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class ReplaysStatistic {
-  private File REPLAY_FOLDER = new File("./replay/");
+  private final File REPLAY_FOLDER = new File("./replay/");
   File[] replayFolderFiles;
-  private int NUM_OF_LABELS = 6;
+  private final int NUM_OF_LABELS = 6;
   private final int FRAME_WIDTH = 650;
   private final int FRAME_HIGHT = 230;
   private int[] replayStatistic;
-  Font FONT = new Font("Modern No. 20", Font.CENTER_BASELINE, 30);
+  private final Font FONT = new Font("Modern No. 20", Font.CENTER_BASELINE, 30);
   private final Color LABELS_COLOR = new Color(130, 130, 130);
   ArrayList<ReplayCharacteristics> replaysStaticticList;
   JFrame replaysStatisticFrame;

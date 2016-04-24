@@ -48,7 +48,7 @@ public class FirstMenu {
   private final int MAX_NUMBER = 100;
   private final int FRAME_WIDTH = 800;
   private final int FRAME_HIGHT = 600;
-  Font FONT = new Font("Modern No. 20", Font.PLAIN, 30);
+  private final Font FONT = new Font("Modern No. 20", Font.PLAIN, 30);
   private final Color LABELS_COLOR = new Color(130, 130, 130);
   private final Color MOUSE_ENTERED_COLOR = new Color(230, 190, 130);
   int[] numOf = new int[3];
