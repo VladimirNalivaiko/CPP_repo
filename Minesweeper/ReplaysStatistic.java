@@ -44,7 +44,7 @@ public class ReplaysStatistic {
     replayStatistic = new int[NUM_OF_LABELS - 1];
     replaysStatisticFrame = new JFrame("Statistic");
     replaysStatisticPanel.setBackground(BACKGROUND_COLOR);
-    replaysStatisticPanel.setLayout(new GridBagLayout()/*new GridLayout(NUM_OF_LABELS, 1)*/);
+    replaysStatisticPanel.setLayout(new GridBagLayout());
     replaysStaticticList = new ArrayList<>();
     getStatisticFromFile();
     replaysStatisticFrame.setSize(FRAME_WIDTH, FRAME_HIGHT);
