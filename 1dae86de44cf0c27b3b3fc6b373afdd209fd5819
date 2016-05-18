@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_44a270fe",
+        "filename": "Minesweeper/ReplaysStatistic.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1007647
+      },
+      "writtenOn": "2016-05-18T16:55:13Z",
+      "side": 1,
+      "message": "\u003e80",
+      "range": {
+        "startLine": 47,
+        "startChar": 80,
+        "endLine": 47,
+        "endChar": 93
+      },
+      "revId": "1dae86de44cf0c27b3b3fc6b373afdd209fd5819",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
