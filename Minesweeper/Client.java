@@ -25,8 +25,7 @@ public class Client extends JPanel implements Runnable {
     this.board = board;
     board.setClient(this);
     clientThread = new Thread(this);
-    clientThread.start();
-    
+    clientThread.start();    
     if (!board.isReplay() && !isBot)
       this.addMouseListener(new CellListener());
     repaint();

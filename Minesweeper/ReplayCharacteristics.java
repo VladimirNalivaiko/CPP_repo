@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 
 public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> {
-  private static ArrayList<Integer> clickList = new ArrayList<>();
+  private static ArrayList<Integer> allReplaysClickList = new ArrayList<>();
+  private ArrayList<Integer> clickList = new ArrayList<>();
   private String PATH_TO_REPLAY = "./replay/";
   private String replayFileName;
   private File replayFile;
@@ -20,11 +21,12 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
   public int sequenceOfLeftClicks;
   private static int sortVariant;
 
-  ReplayCharacteristics(String fileName) throws IOException {
-    
+  ReplayCharacteristics(String fileName) throws IOException {    
     replayFileName = PATH_TO_REPLAY + fileName;
     readReplayCharacteristics();
   }
+  
+  
 
   ReplayCharacteristics readReplayCharacteristics() throws IOException {
     replayFile = new File(replayFileName);
@@ -46,6 +48,7 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
       clicks++;
       if (clicks % 3 == 0) {
         clickList.add(buf);
+        allReplaysClickList.add(buf);
         if (buf == 0) {
           sequenceOfLeftClicks++;
         } else if (buf == 1) {
@@ -58,12 +61,16 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
     return this;
   }
 
-  public static int[] getClickList() {
-    int[] array = new int[clickList.size()];
-    for(int i = 0; i < clickList.size(); i++){
-      array[i] = clickList.get(i);
+  public static int[] getAllReplaysClickList() {
+    int[] array = new int[allReplaysClickList.size()];
+    for(int i = 0; i < allReplaysClickList.size(); i++){
+      array[i] = allReplaysClickList.get(i);
     }
     return array;
+  }
+
+  public ArrayList<Integer> getClickList() {
+    return clickList;
   }
 
   public int getSequenceOfRightClicks() {
@@ -104,6 +111,10 @@ public class ReplayCharacteristics implements Comparable<ReplayCharacteristics> 
 
   public void setSequenceOfClicks(int sequenceOfClicks) {
     this.sequenceOfClicks = sequenceOfClicks;
+  }
+
+  public void setSequenceOfLeftClicks(int sequenceOfLeftClicks) {
+    this.sequenceOfLeftClicks = sequenceOfLeftClicks;
   }
 
   @Override

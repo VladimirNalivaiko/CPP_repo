@@ -108,7 +108,7 @@ public class FirstMenu {
   }
   
   public void showReplayMenu(){
-    ReplayMenu replayMenu = new ReplayMenu(firstPanel, this, numOf);
+    new ReplayMenu(firstPanel, this, numOf);
   }
   
   public void setVisibleLabels(boolean visible){

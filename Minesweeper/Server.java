@@ -41,7 +41,7 @@ public class Server implements Runnable {
 
   private static boolean inGame;
 
-  protected Cell[][] field;
+  private Cell[][] field;
 
   Server(int colomns, int rows, int bombs, boolean isBot,
       boolean isReplay, String fileName)
@@ -305,7 +305,6 @@ public class Server implements Runnable {
 
   /**
    * This function is for analysis players or bot actions
-   * 
    * @param pressedCol cell's column
    * @param pressedRow cell's row
    * @throws InterruptedException throws InterruptedException
@@ -355,7 +354,7 @@ public class Server implements Runnable {
   public void addToUserList(int pressedCol, int pressedRow, int button) {
     userArrayList.add(pressedCol);
     userArrayList.add(pressedRow);
-    userArrayList.add(0);
+    userArrayList.add(button);
   }
 
   void rightMouseButtonListener(int pressedCol, int pressedRow)

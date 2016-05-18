@@ -19,7 +19,6 @@ public class Sort {
         int temp = mas[i];
         mas[i] = mas[j];
         mas[j] = temp;
-
         i++;
         j--;
       }
